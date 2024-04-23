@@ -1,4 +1,4 @@
-from model import db, User, FestivalInfo, Event, UserEvent, FestivalPost, Follower, FestivalLike
+from model import db, User, FestivalInfo, Event, UserEvent, FestivalPost, Follower
 
 
 
@@ -51,8 +51,8 @@ def create_event(title, date, time, location):
 def get_event():
     return Event.query.all()
 
-def get_event_by_user():
-    return UserEvent.query.get(user_attending)
+# def get_event_by_user():
+#     return UserEvent.query.get(user_attending)
 
 
 def create_festPost(title, content, createdAt):
@@ -89,8 +89,8 @@ def unfollow_user(follower_id, followee_id):
 
     return True
 
-def fest_like():
+# def fest_like():
     
 
-def post_like():
+# def post_like():
     
