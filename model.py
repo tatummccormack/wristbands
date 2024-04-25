@@ -14,15 +14,9 @@ class User(db.Model):
     lname= db.Column(db.String(30))
     password = db.column(db.String)
     email = db.Column(db.String, unique=True)
-    phone_num = db.Column(db.Integer(10))
-    dob = db.Column(db.Integer(8))
+    # phone_num = db.Column(db.Integer())
+    # dob = db.Column(db.Integer())
     #user_icon = db.Column(db.img?)
-
-    # events = db.relationship("Event", back_populates="user")
-
-    #def__repr__(self):
-    #    return f"<User user_id={self.user_id} username={self.username}>" #user id or username?
-
 
 
 class FestivalInfo(db.Model):
@@ -31,9 +25,10 @@ class FestivalInfo(db.Model):
 
     fest_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     fest_name = db.Column(db.String)
-    fest_type = db.Column(db.String)
+    # fest_type = db.Column(db.String)
     fest_location = db.Column(db.String)
     fest_date = db.Column(db.DateTime)
+    line_up = db.Column(db.String)
 
     #def__repr__(self):
         # return f"<FestivalInfo fest_id={self.fest_id} fest_name={self.fest_name>" 
@@ -45,7 +40,7 @@ class Event(db.Model):
     __tablename__ = "events"
 
     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    date = db.Coloum(db.DateTime)
+    date = db.Column(db.DateTime)
     time = db.Column(db.DateTime)
     ev_location = db.Column(db.String)
     sched_id = db.Column(db.Integer)
@@ -63,7 +58,7 @@ class UserEvent(db.Model):
     __tablename__ = "user events"
     
     user_event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_attending = db.Coloum(db.Boolean)
+    user_attending = db.Column(db.Boolean)
     user_id=db.Column(db.Integer, db.ForeignKey('users.user_id'))
     event_id=db.Column(db.Integer, db.ForeignKey('events.event_id'))
 
@@ -80,7 +75,7 @@ class FestivalPost(db.Model):
 
     __tablename__ = "posts"
 
-    fchat_id = db.Colomn(db.Integer, autoincrement=True, primary_key=True)
+    fchat_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     content = db.Column(db.String(300))
     createdAt = db.Column(db.DateTime)
 
@@ -96,9 +91,9 @@ class Follower(db.Model):
 
     __tablename__ = "followers"
 
-    following_id = db.Colomn(db.Integer, autoincrement=True, primary_key=True)
-    follower_id = db.Colomn(db.Integer, autoincrement=True, primary_key=True)
-    followee_id = db.Colomn(db.Integer, autoincrement=True, primary_key=True)
+    following_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    follower_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    followee_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 
 
 
@@ -106,7 +101,7 @@ class FestivalLike(db.Model):
 
     __tablename__ = "festival likes"
 
-    like_id = db.Colomn(db.Integer, autoincrement=True, primary_key=True)
+    like_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
@@ -115,7 +110,7 @@ class FestivalLike(db.Model):
 
 
 
-def connect_to_db(flask_app, db_uri="postgresql:///your-database-name", echo=True):
+def connect_to_db(flask_app, db_uri="postgresql:///ratings", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
     flask_app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, flash, session, redirect
-from model import db
+from flask import Flask, render_template, request, flash, session, redirect, jsonify
+from model import connect_to_db, db, User, User, FestivalInfo, Event, UserEvent, FestivalPost, Follower
 import crud
 
 from jinja2 import StrictUndefined
@@ -11,13 +11,15 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route("/")
 def homepage():
-    return render_template("homepage.html")
-
+    return redirect("/login")
 
 @app.route("/login")
 def login():
-    return "Login"
+    return render_template("login.html")
 
+@app.route("/register")
+def register():
+    return render_template("register.html")
 
 @app.route("/logout")
 def logout():
@@ -25,31 +27,51 @@ def logout():
     return redirect("/login")
 
 
-users = []
-
-@app.route("/register", methods=["POST"])
-def register():
-    new_user = request.json
-    users.append(new_user)
-    return redirect("/login")
+# @app.route("/register", methods=["POST"])
+# def register():
+#     new_user = request.json
+#     users.append(new_user)
+#     return redirect("/login")
 
 
-@app.route("/users", methods=["POST"])
-def register_user():
+users = {}
 
-    email = request.form.get("email")
-    password = request.form.get("password")
+@app.route('/create_account', methods=['POST'])
+def create_account():
+    
+    fname = request.form.get('fname') 
+    lname = request.form.get('lname')
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
     user = crud.get_user_by_email(email)
     if user:
         flash("Cannot create an account with that email. Try again.")
     else:
-        user = crud.create_user(email, password)
+        user = crud.create_user(fname, lname, username, email, password)
         db.session.add(user)
         db.session.commit()
         flash("Account created! Please log in.")
 
-    return redirect("/")
+    return redirect("/login")
+
+
+@app.route("/login", methods=["POST"])
+def process_login():
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    user = crud.get_user_by_email(email)
+    if not user or user.password != password:
+        flash("The email or password you entered was incorrect.")
+    else:
+        session["user_email"] = user.email
+        flash(f"Welcome back, {user.email}!")
+
+    return redirect("/homepage")
+
 
 
 @app.route('/profile/<username>')
@@ -61,10 +83,10 @@ def profile(username):
         return 'User not found', 404
 
 
-@app.route("/users/<user_id>")
-def show_user(user_id):
-    user = crud.get_user_by_id(user_id)
-    return render_template("user_details.html", user=user)
+# @app.route("/users/<user_id>")
+# def show_user(user_id):
+#     user = crud.get_user_by_id(user_id)
+#     return render_template("user_details.html", user=user)
 
 
 
@@ -80,3 +102,8 @@ def show_fest(fest_id):
     festival = crud.get_fest_by_id(fest_id)
     return render_template("festival_details.html", festival=festival)
 
+
+
+if __name__ == "__main__":
+    connect_to_db(app)
+    app.run(host="0.0.0.0", debug=True)

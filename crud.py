@@ -1,9 +1,10 @@
-from model import db, User, FestivalInfo, Event, UserEvent, FestivalPost, Follower
+from model import db, User, connect_to_db
+# ^FestivalInfo, Event, UserEvent, FestivalPost, Follower, 
 
 
 
-def create_user(email, password):
-    user = User(email=email, password=password)
+def create_user(fname, lname, username, email, password):
+    user = User(fname=fname, lname=lname,username=username, email=email, password=password)
     return user
 
 def get_users():
@@ -11,9 +12,11 @@ def get_users():
 
 
 def get_user_by_email(email):
-    return User.query.get(email)
+    return User.query.filter(User.email == email).first()
 
 
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
 
 def create_festival(title, lineup, date, location):
 
@@ -28,69 +31,73 @@ def create_festival(title, lineup, date, location):
 
 
 
-def get_festivals():
-    return FestivalInfo.query.all()
+# def get_festivals():
+#     return FestivalInfo.query.all()
 
 
-def get_fest_by_id(fest_id):
-    return FestivalInfo.query.get(fest_id)
+# def get_fest_by_id(fest_id):
+#     return FestivalInfo.query.get(fest_id)
 
 
 
-def create_event(title, date, time, location):
+# def create_event(title, date, time, location):
 
-    event = event(
-        title=title,
-        date=date,
-        time=time,
-        location=location,
-    )
+#     event = event(
+#         title=title,
+#         date=date,
+#         time=time,
+#         location=location,
+#     )
 
-    return event
+#     return event
 
-def get_event():
-    return Event.query.all()
+# def get_event():
+#     return Event.query.all()
 
-# def get_event_by_user():
-#     return UserEvent.query.get(user_attending)
+# # def get_event_by_user():
+# #     return UserEvent.query.get(user_attending)
 
 
-def create_festPost(title, content, createdAt):
+# def create_festPost(title, content, createdAt):
 
-    festPost = festPost(
-        title=title,
-        content=content,
-        createdAt=createdAt,
-    )
+#     festPost = festPost(
+#         title=title,
+#         content=content,
+#         createdAt=createdAt,
+#     )
 
-    return festPost
+#     return festPost
 
-def get_festPost():
-    return FestivalPost.query.all()
+# def get_festPost():
+#     return FestivalPost.query.all()
 
-def follow_user(follower_id, followee_id):
-    existing_follower = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
-    if existing_follower:
-        return False
+# def follow_user(follower_id, followee_id):
+#     existing_follower = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
+#     if existing_follower:
+#         return False
     
-    new_follower = Follower(follower_id=follower_id, followee_id=followee_id)
-    db.session.add(new_follower)
-    db.session.commit()
+#     new_follower = Follower(follower_id=follower_id, followee_id=followee_id)
+#     db.session.add(new_follower)
+#     db.session.commit()
 
-    return True
+#     return True
                                                                                 
-def unfollow_user(follower_id, followee_id):
-    follower_to_delete = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
-    if not follower_to_delete:
-        return False
+# def unfollow_user(follower_id, followee_id):
+#     follower_to_delete = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
+#     if not follower_to_delete:
+#         return False
     
-    db.session.delete(follower_to_delete)
-    db.session.commit()
+#     db.session.delete(follower_to_delete)
+#     db.session.commit()
 
-    return True
+#     return True
 
-# def fest_like():
+# # def fest_like():
     
 
-# def post_like():
+# # def post_like():
     
+if __name__ == "__main__":
+    from server import app
+
+    connect_to_db(app)
