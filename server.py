@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db, db, User, User, FestivalInfo, Event, UserEvent, FestivalPost, Follower
+from model import connect_to_db, db, User, FestivalInfo
+#, Event, UserEvent, FestivalPost, Follower
 import crud
 
 from jinja2 import StrictUndefined
 
+
 app = Flask(__name__)
+app.secret_key = "sdjhfbdhjfbfdjh"
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -12,9 +15,37 @@ app.jinja_env.undefined = StrictUndefined
 def homepage():
     return redirect("/login")
 
+@app.route("/search")
+def search():
+    return render_template("search.html")
+
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+@app.route("/handle-login", methods=["POST"])
+def process_login():
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    user = crud.get_user_by_email(email)
+    if not user or user.password != password:
+        flash("The email or password you entered was incorrect.")
+    else:
+        session["user_email"] = user.email
+        flash(f"Welcome back, {user.username}!")
+        return redirect("/profile")
+    return redirect("/")
+
+@app.route("/profile")
+def profile_page():
+    user = crud.get_user_by_email(session["user_email"])
+    print("We're loggin in this user")
+    print(user)
+    #get the user by their email
+    #pass that into our render template statement
+    return render_template("profile.html", user=user)
 
 @app.route("/register")
 def register():
@@ -33,18 +64,20 @@ def logout():
 #     return redirect("/login")
 
 
-users = {}
+# users = {}
 
 @app.route('/create_account', methods=['POST'])
 def create_account():
-    
     fname = request.form.get('fname') 
     lname = request.form.get('lname')
     username = request.form.get('username')
     email = request.form.get('email')
     password = request.form.get('password')
-
+    print("This is the username")
+    print(username)
     user = crud.get_user_by_email(email)
+    print("This is the user")
+    print(user)
     if user:
         flash("Cannot create an account with that email. Try again.")
     else:
@@ -56,30 +89,14 @@ def create_account():
     return redirect("/login")
 
 
-@app.route("/login", methods=["POST"])
-def process_login():
 
-    email = request.form.get("email")
-    password = request.form.get("password")
-
-    user = crud.get_user_by_email(email)
-    if not user or user.password != password:
-        flash("The email or password you entered was incorrect.")
-    else:
-        session["user_email"] = user.email
-        flash(f"Welcome back, {user.email}!")
-
-    return redirect("/homepage")
-
-
-
-@app.route('/profile/<username>')
-def profile(username):
-    user = users.get(username)
-    if user:
-        return render_template('profile.html', user=user)
-    else:
-        return 'User not found', 404
+# @app.route('/profile/<username>')
+# def profile(username):
+#     user = users.get(username)
+#     if user:
+#         return render_template('profile.html', user=user)
+#     else:
+#         return 'User not found', 404
 
 
 # @app.route("/users/<user_id>")
@@ -89,17 +106,17 @@ def profile(username):
 
 
 
-@app.route("/festivals")
-def all_festivals():
-    festivals = crud.get_festivals()
-    return render_template("all_festivals.html", festivals=festivals) 
+# @app.route("/festivals")
+# def all_festivals():
+#     festivals = crud.get_festivals()
+#     return render_template("all_festivals.html", festivals=festivals) 
 
 
 
-@app.route("/festivalinfo/<fest_id>")
-def show_fest(fest_id):
-    festival = crud.get_fest_by_id(fest_id)
-    return render_template("festival_details.html", festival=festival)
+# @app.route("/festivalinfo/<fest_id>")
+# def show_fest(fest_id):
+#     festival = crud.get_fest_by_id(fest_id)
+#     return render_template("festival_details.html", festival=festival)
 
 
 

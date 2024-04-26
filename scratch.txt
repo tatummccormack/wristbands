@@ -1,0 +1,38 @@
+register.html AJAX later
+<script>
+        document.getElementById('createAccountForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var formData = {
+                fname: document.getElementById('fname').value,
+                lname: document.getElementById('lname').value,
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+            
+            
+            fetch('/create_account', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.href = '/login'; 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+
+back in profile - jinja
+<p><strong></strong> {{ user.bio }}</p>
+    <p><strong>Followers </strong> {{ user.follower_count }}</p>
+    <p><strong>Following </strong> {{ user.following_count }}</p>
+    <p><strong>Festivals </strong> {{ user.festival_following_count }}</p>

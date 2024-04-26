@@ -2,13 +2,15 @@
     {
         "line_up": "Lana Del Ray, Tyler The Creator, Doja Cat",
         "fest_location": "Indio, CA",
-        "fest_date": "2024/04/12-2024/04/14",
-        "fest_name": "Coachella"
+        "fest_date": "2024/04/12",
+        "fest_name": "Coachella",
+        "poster_path": "test"
     }, 
     {
         "line_up": "Lil Wayne, Usher, Backstreet Boys",
         "fest_location": "Las Vegas, NV",
         "fest_date": "2024/05/04",
-        "fest_name": "Lovers & Friends"
+        "fest_name": "Lovers & Friends",
+        "poster_path": "test"
     }
 ]

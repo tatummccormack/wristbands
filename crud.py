@@ -1,5 +1,5 @@
-from model import db, User, connect_to_db
-# ^FestivalInfo, Event, UserEvent, FestivalPost, Follower, 
+from model import db, User, FestivalInfo, connect_to_db
+# ^, Event, UserEvent, FestivalPost, Follower, 
 
 
 
@@ -18,13 +18,16 @@ def get_user_by_email(email):
 def get_user_by_id(user_id):
     return User.query.get(user_id)
 
-def create_festival(title, lineup, date, location):
-
-    festival = festival(
-        title=title,
-        lineup=lineup,
-        date= date,
-        location=location,
+def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line_up):
+    """Make a festival info instance
+     example datetime string "2024-04-25 16:46:58,421"
+    """
+    festival = FestivalInfo(
+        fest_name=fest_name,
+        fest_location=fest_location,
+        fest_startdate= fest_startdate,
+        fest_enddate=fest_enddate,
+        line_up=line_up
     )
 
     return festival
