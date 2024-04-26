@@ -86,6 +86,12 @@ festival10 = crud.create_festival("Jingle UR Bells", "North Pole", start10, end1
 model.db.session.add(festival10)
 model.db.session.commit()
 
+start11 = datetime(2024, 10, 11)
+end11 = datetime(2024, 10, 15)
+festival11 = crud.create_festival("rah rah", "North Pole", start11, end11, "t-pain")
+model.db.session.add(festival11)
+model.db.session.commit()
+
 # with open("data/festivals.json") as f:
 #     festival_data = json.loads(f.read())
 

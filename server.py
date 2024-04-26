@@ -19,6 +19,30 @@ def homepage():
 def search():
     return render_template("search.html")
 
+@app.route("/search-results.json", methods=["POST"])
+def search_results():
+    festival = request.json.get("fest_location")
+    festquery = f'%{festival}%'
+    festival_results = FestivalInfo.query.filter(FestivalInfo.fest_location.like(festquery)).all()
+    
+    results = []
+
+    for fest in festival_results:
+        festlo = {
+            "fest_id": fest.fest_id,
+            "fest_name": fest.fest_name, 
+            "fest_location": fest.fest_location,
+            "fest_startdate": fest.fest_startdate, 
+            "fest_enddate": fest.fest_enddate, 
+            "line_up": fest.line_up,
+        }
+        results.append(festlo)
+
+    print(festival_results)
+    print(results)
+    return jsonify(results)
+
+
 @app.route("/login")
 def login():
     return render_template("login.html")
