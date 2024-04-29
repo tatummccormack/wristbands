@@ -1,5 +1,5 @@
 from model import db, User, FestivalInfo, connect_to_db
-# ^, Event, UserEvent, FestivalPost, Follower, 
+# ^, Event, UserEvent, FestivalPost, 
 
 
 
@@ -17,6 +17,9 @@ def get_user_by_email(email):
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+def get_user_by_username(username):
+    return User.query.get(username)
 
 def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line_up):
     """Make a festival info instance
@@ -74,6 +77,9 @@ def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line
 # def get_festPost():
 #     return FestivalPost.query.all()
 
+def get_follower_by_id(follower_id):
+    return Follower.query.get(follower_id)
+
 # def follow_user(follower_id, followee_id):
 #     existing_follower = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
 #     if existing_follower:
@@ -102,5 +108,4 @@ def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line
     
 if __name__ == "__main__":
     from server import app
-
     connect_to_db(app)

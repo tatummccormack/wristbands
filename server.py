@@ -60,7 +60,7 @@ def process_login():
         session["user_email"] = user.email
         flash(f"Welcome back, {user.username}!")
         return redirect("/profile")
-    return redirect("/")
+    return redirect("/homepage")
 
 @app.route("/profile")
 def profile_page():
@@ -70,6 +70,19 @@ def profile_page():
     #get the user by their email
     #pass that into our render template statement
     return render_template("profile.html", user=user)
+
+@app.route('update_bio/<int:user_id>', methods =["POST"])
+def update_bio(user_id):
+    new_bio = request.form['bio']
+    if len(new_bio) > 200: 
+        return "Maximum Character limit 200"
+    
+    user = users.get(user_id)
+    if not user: 
+        return "User Not Found"
+    
+    user['bio'] = new_bio
+    return redirect('/profile', user_id=user_id)
 
 @app.route("/register")
 def register():
@@ -112,7 +125,29 @@ def create_account():
 
     return redirect("/login")
 
+# @app.route('/follow'), methods=['POST'])
+# def follow_user():
 
+#     user_id = crud.get_user_by_id('user_id')
+#     follower_id = crud.get_follwer_by_id('follower_id')
+
+#     if user_id is None or follower_id is None:
+#         flash(f"???? idk if necessary")
+    
+#     if user_id not in User or follower_id not in User:
+#         flash(f"User Not Found")
+    
+#     if follower_id in User[user_id]["followers"]:
+#         session["username"] = user.username
+#         flash(f"Already following {user.username}!") 
+#         #how to get this to say already following THAt person not user logged in as
+
+#     users[user_id]["followers"].append(follower_id)
+#         session["username"] = user.username
+#         flash(f"You are now following {user.username}")
+#     #again^^ flash followee_id /username
+
+ 
 
 # @app.route('/profile/<username>')
 # def profile(username):
