@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+<h1>Feed</h1>
+
+  <div class="wrapper">
+    <form action="/create_post" method="POST">
+      <div class="input-box">
+        <input type="text" name="content" id="post-content" placeholder="Share your thoughts on upcoming Festivals!"/>
+      </div>
+      <button type="submit" class="btn">POST</button>
+    </form>
+      <!-- <div id="post-results"></div>
+      <script src="/static/posts.js"></script> -->
+  </div>
+  
+  <div class="wrapper">
+    <div class="input-box">
+      <div id="post-results"></div>
+      <script src="/static/posts.js"></script>
+    </div>
+  </div>
+
+  <!-- <div class="postbox">
+    <form id="post-form">
+      <div class="postbox_input">
+        <input type="text" placeholder="Share your thoughts on upcoming Festivals!"/>
+      </div>
+      <button class="postbox_btn">POST</button>
+    </form>
+    <div id="post-results"></div>
+    <script src="/static/posts.js"></script>
+  </div> -->
+
+  <!-- <div class="post">
+    <div class="post_avatar">
+      <img src="/static/goofygoober.png"/>
+    </div> -->
+
+    <!-- <div class="post_body">
+      <div class="post_header">
+        <div class="post_headerText">
+          <h3>
+            goofygoober
+            <span class="post_headerSpecial">
+              <span class="material-icons post_badge"> Verified </span> @goofygoober
+            </span>
+          </h3>
+        </div>
+      </div>
+    </div> -->
+
+
+
+{% endblock %}
+<script src="/static/scripts.js"></script>
+{% block after_body %}{% endblock %}

@@ -1,35 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ user.username }}</title>
-    <link rel="stylesheet" href="../static/style.css"/>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/> 
-</head>
+{% extends 'base.html' %}
 
-<body>
-    <div class="profile"> 
+{% block title %}{% endblock %}
 
-        <img src="profile_picture.jpg" alt="Profile Picture" class="profile-picture">
+{% block head %}{% endblock %}
 
-        <h1 class="username">{{ user.username }}</h1>
+{% block body %}
 
-        <!-- <p class="bio">{{ user.bio }}</p> -->
 
-        <p class="follower-count">Followers: {{ user.followers }}</p>
+<div class="profile"> 
 
-        <p class="following-count">Following: {{ user.following }}</p>
+    <h1 class="username">{{ user.username }}</h1>
 
-    </div>
+    <img src="/static/goofygoober.png" class="user-pic">
+
+    <button class="follow-button followed">Unfollow</button>
+
+    <script src="/static/follow.js"></script>
+
+    <h2 class="followers">
+
+        <div class="followers" id="followers">
+            <h3>followers | following</h3> 
+            <div id="followers-results"></div>
+            <div id="following-results"></div>
+
+        </div>
+    </h2>
+
+    <!-- <h3 class="posts">
+
+        <div class="posts" id="posts">
+            <h2>Posts</h2>
+            <div id="post-results"></div>
     
-    <form action="{{ url_for('update_bio', user_id=user.id) }}" method="POST">
-        <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea><br>
-        <input type="submit" value="Update Bio">
-    </form>
+            <script src="/static/posts.js"></script>
+        </div>
 
-    <!-- <a href="/logout">Logout</a> -->
+        <form id="postForm">
+            <textarea id="postContent" rows="4" cols="50" placeholder="POST"></textarea><br>
+            <button type="submit">Submit</button>
+        </form> 
+    </h3> -->
 
-</body>
-</html>
+</div>
+    
+<a href="/logout">Logout</a>
+
+{% endblock %}
+
+{% block after_body %}{% endblock %}
+
+
+

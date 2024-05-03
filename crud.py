@@ -1,5 +1,5 @@
-from model import db, User, FestivalInfo, connect_to_db
-# ^, Event, UserEvent, FestivalPost, 
+from model import db, User, FestivalInfo, connect_to_db, Post
+# ^, Event, UserEvent, 
 
 
 
@@ -37,12 +37,15 @@ def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line
 
 
 
-# def get_festivals():
-#     return FestivalInfo.query.all()
+def get_festivals():
+    return FestivalInfo.query.all()
 
 
-# def get_fest_by_id(fest_id):
-#     return FestivalInfo.query.get(fest_id)
+def get_fest_by_id(fest_id):
+    return FestivalInfo.query.get(fest_id)
+
+def get_fest_by_name(fest_name):
+    return FestivalInfo.query.get(fest_name)
 
 
 
@@ -64,21 +67,45 @@ def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line
 # #     return UserEvent.query.get(user_attending)
 
 
-# def create_festPost(title, content, createdAt):
+def create_feed_post(content, user_id):
+    new_post = Post(content=content, user_id=user_id)
+    db.session.add(new_post)
+    db.session.commit()
+    return new_post
 
-#     festPost = festPost(
-#         title=title,
-#         content=content,
-#         createdAt=createdAt,
-#     )
+# def create_fest_post(content, fest_id, user_id):
+#     new_f_post = post(content=content, fest_id=fest_id, user_id=user_id)
+#     db.session.add(new_f_post)
+#     db.session.commit()
+#     return new_f_post
 
-#     return festPost
 
-# def get_festPost():
-#     return FestivalPost.query.all()
+def get_post_by_id(post_id):
+    return Post.query.get(post_id)
 
-def get_follower_by_id(follower_id):
-    return Follower.query.get(follower_id)
+
+def get_all_posts():
+    return Post.query.all()
+
+# def like_post(post_id):
+#     post = get_post(post_id)
+#     if post:
+#         post.likes += 1
+#         db.session.commit()
+#         return post
+#     return None
+
+# def unlike_post(post_id):
+#     post = get_post(post_id)
+#     if post and post.likes > 0:
+#         post.likes -= 1
+#         db.session.commit()
+#         return post
+#     return None
+    
+
+# def get_follower_by_id(follower_id):
+#     return Follower.query.get(follower_id)
 
 # def follow_user(follower_id, followee_id):
 #     existing_follower = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
@@ -101,10 +128,21 @@ def get_follower_by_id(follower_id):
 
 #     return True
 
-# # def fest_like():
-    
+# def fest_like(fest_id):
+#     fest = get_fest_by_id(fest_id)
+#     if fest:
+#         fest.likes += 1 
+#         db.session.commit()
+#         return fest
+#     return None
 
-# # def post_like():
+# def unlike_fest(fest_id):
+#     fest = get_fest_by_id(fest_id)
+#     if fest and fest.likes > 0:
+#         fest.likes -= 1
+#         db.session.commit()
+#         return fest
+#     return None
     
 if __name__ == "__main__":
     from server import app

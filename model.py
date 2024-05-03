@@ -14,6 +14,7 @@ class User(db.Model):
     lname= db.Column(db.String(30))
     password = db.Column(db.String)
     email = db.Column(db.String, unique=True)
+    # bio = db.Column(db.String)
     # phone_num = db.Column(db.Integer())
     # dob = db.Column(db.Integer())
     #user_icon = db.Column(db.img?)
@@ -71,19 +72,23 @@ class FestivalInfo(db.Model):
 
 
 
-# class FestivalPost(db.Model):
+class Post(db.Model):
 
-#     __tablename__ = "posts"
+    __tablename__ = "posts"
 
-#     fchat_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     content = db.Column(db.String(300))
-#     createdAt = db.Column(db.DateTime)
+    post_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    content = db.Column(db.String(300))
+    # post_time = db.Column(db.DateTime, default=datetime.utcnow)
+    # fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    username = db.Column(db.Integer, db.ForeignKey('users.username'))
+    # likes = db.Column(db.Integer, default=0)
 
-#     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    def __repr__(self):
+        return f"<Post(post_id={self.post_id}, content='{self.content}, likes={self.likes})>"
 
-#     festivals = db.relationship("festival", back_populates="festivalpost")
-#     users = db.relationship("user", back_populates="festivalpost")
+    # festivals = db.relationship("festivalInfo", back_populates="post")
+    # users = db.relationship("User", back_populates="Post")
 
 
 

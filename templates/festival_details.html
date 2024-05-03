@@ -1,29 +1,18 @@
-<!-- {% extends 'base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}{{ festival.title }} - Details{% endblock %}
+{% block title %}{{ festival.fest_name }}{% endblock %}
+
+{% block head %}{% endblock %}
 
 {% block body %}
-<h1>{{ festival.title }}</h1>
-
+<h1>{{ festival.fest_name }}</h1>
 <p>
-  {{ festival.overview }}
+  Location: {{ festival.fest_location }}
+</p>
+<p>
+  Dates: {{ festival.fest_startdate }} - {{ festival.fest_enddate }}
 </p>
 
-{% if session.get('user_email') %}
-<h2>Like</h2>
-<!-- <form action="/movies/{{ movie.movie_id }}/ratings" method="POST"> -->
-  <!-- <p>
-    attending:
-    <select name="attending">
-      <option value="">attending</option>
-      <!-- {% for num in range(6) %}
-        <option value="{{ num }}">{{ num }}</option> NEEDS TO CHANGE TO BOOLEAN-->
-      <!-- {% endfor %}
-    </select>
-  </p>
-  <p><input type="submit"></p>
-</form>
-{% endif %} --> -->
+{% endblock %}
 
-<!-- <img src="{{ movie.poster_path }}">
-{% endblock %} --> -->
+{% block after_body %}{% endblock %}

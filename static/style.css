@@ -1,21 +1,20 @@
 @import url(https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap);
 
-* {
+ * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
 
-/* .drop{
+.drop{
     width:100%;
     min-height: 100vh;
-    background: red;
-    color: white;
+    color: rgb(86, 156, 91);
 }
 
 nav{
-    background: white;
+    background: rgb(86, 156, 91);
     width: 100%;
     padding 10px 10%;
     display: flex;
@@ -49,7 +48,7 @@ nav ul li{
 nav ul li a{
     color:black; 
     text-decoration: none;
-} */
+}  
 
 body {
     background-image: url('img.jpg');

@@ -36,3 +36,55 @@ back in profile - jinja
     <p><strong>Followers </strong> {{ user.follower_count }}</p>
     <p><strong>Following </strong> {{ user.following_count }}</p>
     <p><strong>Festivals </strong> {{ user.festival_following_count }}</p>
+
+
+Twitter API 
+class Relationship(Model):
+    @classmethod
+    def parse(cls, api, json):
+        result = cls(api)
+        for k, v in json.items():
+            if k == 'connections':
+                setattr(result, 'is_following', 'following' in v)
+                setattr(result, 'is_followed_by', 'followed_by' in v)
+                setattr(result, 'is_muted', 'muting' in v)
+                setattr(result, 'is_blocked', 'blocking' in v)
+                setattr(result, 'is_following_requested', 'following_requested' in v)
+                setattr(result, 'no_relationship', 'none' in v)
+            else:
+                setattr(result, k, v)
+        return result
+
+
+PROFILE 
+
+        <!-- <p class="follower-count">Followers: {{ user.followers }}</p>
+
+        <p class="following-count">Following: {{ user.following }}</p>
+
+        <div class="posts" id="posts">
+            <h2>Posts</h2>
+        </div>
+
+        <!-- <img src="profile_picture.jpg" alt="Profile Picture" class="profile-picture"> -->
+
+        <!-- <form action="{{ url_for('update_bio', user_id=user.id) }}" method="POST">
+        <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea><br>
+        <input type="submit" value="Update Bio">
+    </form> -->
+
+
+    # @app.route('/posts', methods=['POST'])
+# def create_post():
+#     data = request.get_json()
+#     data['likes'] = 0  # Initialize likes count to 0
+#     posts.append(data)  # Assuming data contains post content and user information
+#     return jsonify(data), 201
+
+# @app.route('/posts/<int:post_id>/like', methods=['POST'])
+# def like_post(post_id):
+#     for post in posts:
+#         if post.get('id') == post_id:
+#             post['likes'] += 1
+#             return jsonify(post)
+#     return jsonify({'error': 'Post not found'}), 404

@@ -1,6 +1,6 @@
+let searchForm = document.querySelector('#search-form');
 
-
-document.querySelector('#search-form').addEventListener('submit', (evt) => {
+searchForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const formInputs = {
         fest_location: document.querySelector('#fest_location').value
@@ -27,3 +27,4 @@ document.querySelector('#search-form').addEventListener('submit', (evt) => {
     });
     
 });
+
