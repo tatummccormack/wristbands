@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+        <!-- <div id="festivalsContainer"></div> -->
+<h1>Festivals</h1>
+
+<form id="fest-form">
+
+        <div class="input-box">
+            <input type="text" placeholder="Search Festivals" id="fest_name" name="fest_name">
+        </div>
+
+        <button type="submit" class="btn">Submit</button>
+        <!-- <label>
+            <input type="text" placeholder="Search" id="fest_location" name="fest_name">
+        </label> -->
+
+        <!-- <button type="submit" class="btn">Submit</button> -->
+</form>
+
+<div id="fest-results"></div>
+
+<script src="/static/festname_search.js"></script>
+
+
+<ul>
+    {% for festival in festivals %}
+      <li>
+        <a href="/festivals/{{ festival.fest_id }}">
+          {{ festival.fest_name }}
+        </a>
+      </li>
+    {% endfor %}  
+</ul>
+{% endblock %}
+
+
+{% block after_body %}{% endblock %}
+
+    <!-- <script>
+        function createFestivalElement(festival) {
+            var festivalDiv = document.createElement("div");
+            festivalDiv.classList.add("festival");
+            festivalDiv.innerHTML = "<p class='name'>" + fest_name + "</p>" +
+                                    "<p class='location'>" + fest_location + "</p>" +
+                                    "<p class='date'>" + fest_startdate + "</p>"
+                                    "<p class='date'>" + fest_enddate + "</p>";
+            return festivalDiv;
+        }
+
+        
+        async function fetchAndPopulateFestivals() {
+            const response = await fetch('/festivals'); 
+            const festivals = await response.json();
+
+            const festivalsContainer = document.getElementById('festivalsContainer');
+            festivals.forEach(function(festival) {
+                const festivalElement = createFestivalElement(festival);
+                festivalsContainer.appendChild(festivalElement);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchAndPopulateFestivals();
+        });
+    </script> -->
+<!-- </body>
+</html> -->

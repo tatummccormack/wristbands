@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db, db, User, FestivalInfo, Post
+from flask import Flask, render_template, request, flash, session, redirect, jsonify, url_for
+from model import connect_to_db, db, User, FestivalInfo, Post, FestPost, Event
 import crud
 
 from jinja2 import StrictUndefined
@@ -12,7 +12,8 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route("/")
 def homepage():
-    return render_template("homepage.html")
+    all_posts = crud.get_all_posts()
+    return render_template("homepage.html", all_posts=all_posts)
 
 @app.route("/login")
 def login():
@@ -29,8 +30,8 @@ def process_login():
         flash("The email or password you entered was incorrect.")
     else:
         session["user_email"] = user.email
-        flash(f"Welcome back, {user.username}!")
-        return redirect("/profile")
+        # flash(f"Welcome back, {user.username}!")
+        return redirect("/")
     return redirect("/search")
 
 @app.route("/register")
@@ -45,11 +46,8 @@ def logout():
 @app.route("/profile")
 def profile_page():
     user = crud.get_user_by_email(session["user_email"])
-    print("We're loggin in this user")
-    print(user)
-    #get the user by their email
-    #pass that into our render template statement
-    return render_template("profile.html", user=user)
+    attending_festivals = crud.get_attending_festivals(user.user_id)
+    return render_template("profile.html", user=user, attending_festivals=attending_festivals)
 
 # @app.route('/update_bio', methods =["POST"])
 # def update_bio(user_id):
@@ -110,6 +108,7 @@ def fest_results():
             "fest_enddate": fest.fest_enddate, 
             "line_up": fest.line_up,
         }
+        
         results.append(festlo)
 
     print(festival_results)
@@ -128,7 +127,7 @@ def fest_results():
 
 
 
-@app.route('/create_account', methods=['POST'])
+@app.route("/create_account", methods=["POST"])
 def create_account():
     fname = request.form.get('fname') 
     lname = request.form.get('lname')
@@ -151,23 +150,28 @@ def create_account():
     return redirect("/login")
 
 
-@app.route('/create_post', methods=['POST'])
+@app.route("/edit_bio", methods=["POST"])
+def edit_bio():
+
+    user = crud.get_user_by_email(session["user_email"])
+    
+    user.bio = request.form["bio"]
+    db.session.commit()
+
+    return redirect(url_for("profile_page"))
+
+
+@app.route("/create_post", methods=["POST"])
 def create_post():
    
     content = request.form.get('content')
     user = crud.get_user_by_email(session["user_email"])
-    # post_time = request.json.get('createdAt') # Assuming you pass user ID in the request
-
-    # if not user_id:
-    #     return jsonify({"error": "Missing userid data"}), 400
-    
-    # if not content:
-    #     return jsonify({"error": "Missing required data"}), 400
-
+   
+    print(content)
+    print(user.user_id)
     crud.create_feed_post(content, user.user_id)
 
     return redirect('/')
-
 
 @app.route('/post-results.json', methods=['GET'])
 def get_posts():
@@ -176,27 +180,128 @@ def get_posts():
     allposts = []
 
     for post in posts:
-        current_post = {"content":post.content, "user_id":post.user_id, "post_id":post.post_id}
+        current_post = {
+            "avatar":post.avatar,
+            "content":post.content, 
+            "user_id":post.user_id, 
+            "post_id":post.post_id, 
+            "username":post.user.username, 
+            "likes": post.likes
+        }
+
         allposts.append(current_post)
 
     return jsonify(allposts)
 
 
-# @app.route("/handle-posts", methods=["POST"])
-# def process_post():
+@app.route('/createFest_post', methods=['POST'])
+def createFest_post():
 
-#     user_id = request.json.get('user_id') 
-#     content = request.json.get('content')
-#     post_time = request.json.get('createdAt')
+    # TODO - update this to work with fest post submit form in festival_details.html
 
-#     post = crud.get_Post(fchat_id)
-#     if not user or user.password != password:
-#         flash("The email or password you entered was incorrect.")
-#     else:
-#         session["user_email"] = user.email
-#         flash(f"Welcome back, {user.username}!")
-#         return redirect("/profile")
-#     return redirect("/search")
+    fest_id = request.form.get('fest_id')
+    content = request.form.get('content')
+    user = crud.get_user_by_email(session["user_email"])
+    print(fest_id)
+    print(content)
+    print(user.user_id)
+
+    crud.createFest_post(content, user.user_id, fest_id)
+    # FestivalInfo.fest_id
+
+    return redirect(url_for('show_fest', fest_id=fest_id))
+
+
+@app.route('/festpost-results.json/<fest_id>', methods=['GET'])
+def get_festposts(fest_id):
+    festposts = crud.get_all_posts_by_fest(fest_id)
+    print(festposts)
+    allfestposts = []
+    if festposts:
+        for fp in festposts:
+            current_post = {
+                "content":fp.content, 
+                "user_id":fp.user_id, 
+                "username":fp.user.username, 
+                "festpost_id":fp.festpost_id, 
+                "fest_id":fp.fest_id,
+                "likes": fp.likes
+                }
+            print(current_post)
+            allfestposts.append(current_post)
+        print(allfestposts)
+    return jsonify(allfestposts)
+
+
+@app.route('/like/<int:post_id>', methods=['POST'])
+def like_post(post_id):
+    print(post_id)
+    post = crud.get_post_by_id(post_id)
+    print(post.likes)
+    post.likes += 1
+    print(post.likes)
+    db.session.add(post)
+    db.session.commit()
+    return 'Success!'
+
+@app.route('/comment/<int:post_id>', methods=['POST'])
+def add_comment(post_id):
+    data = request.get_json()
+    comment = data.get('comment')
+
+    posts_with_comments = []
+
+    for post in posts_with_comments:
+        if post['id'] == post_id:
+            post['comments'].append(comment)
+            return '' 
+        
+
+@app.route('/attend-festival/<int:fest_id>', methods=['POST'])
+def attend_festival_route(fest_id):
+    user = crud.get_user_by_email(session["user_email"])  
+
+    if crud.attend_festival(user.user_id, fest_id):  
+        return jsonify({'message': 'Successfully attending the festival'}), 200
+    else:
+        return jsonify({'error': 'User is already attending the festival'}), 400
+    
+
+@app.route('/unattend-festival/<int:fest_id>', methods=['DELETE'])
+def unattend_festival_route(fest_id):
+    
+    user = crud.get_user_by_email(session["user_email"])
+
+    if crud.unattend_festival(user.user_id, fest_id):
+        return jsonify({'message': 'Successfully unattended the festival'}), 200
+    else:
+        return jsonify({'error': 'User is not attending the festival'}), 400
+    
+
+@app.route('/attending-festivals.json', methods=['GET'])
+def get_attending_festivals():
+    user = crud.get_user_by_email(session["user_email"])
+
+    if user:
+        attending_events = crud.get_attending_events(user.user_id)
+        attending_festivals = []
+
+        for event in attending_events:
+            festival = {
+                "fest_id": event.festival.fest_id,
+                "fest_name": event.festival.fest_name,
+                "fest_location": event.festival.fest_location,
+                "fest_startdate": event.festival.fest_startdate,
+                "fest_enddate": event.festival.fest_enddate,
+                "line_up": event.festival.line_up
+            }
+            attending_festivals.append(festival)
+
+        return jsonify(attending_festivals)
+    else:
+        return jsonify({'error': 'User not found'}), 404
+    
+
 
 # @app.route('/follow', methods=['POST'])
 # def follow_user():
@@ -228,14 +333,6 @@ def get_posts():
 #     Users[followee]["followers"].remove(follower)
 #     return jsonify({"message": "Successfully unfollowed user"})
 
-
-# @app.route('/profile/<username>')
-# def profile(username):
-#     user = users.get(username)
-#     if user:
-#         return render_template('profile.html', user=user)
-#     else:
-#         return 'User not found', 404
 
 
 @app.route("/festivals")

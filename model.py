@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -14,10 +14,14 @@ class User(db.Model):
     lname= db.Column(db.String(30))
     password = db.Column(db.String)
     email = db.Column(db.String, unique=True)
-    # bio = db.Column(db.String)
+    bio = db.Column(db.Text) 
     # phone_num = db.Column(db.Integer())
     # dob = db.Column(db.Integer())
-    #user_icon = db.Column(db.img?)
+    avatar = db.Column(db.String) #path to the file
+    
+    post = db.relationship("Post", back_populates="user")
+    festpost = db.relationship("FestPost", back_populates="user")
+    events = db.relationship("Event", back_populates="user")
 
 
 class FestivalInfo(db.Model):
@@ -31,45 +35,22 @@ class FestivalInfo(db.Model):
     fest_enddate = db.Column(db.DateTime)
     line_up = db.Column(db.String)
 
+    festposts = db.relationship("FestPost", back_populates="festival")
+    events = db.relationship("Event", back_populates="festival")
+
     def __repr__(self):
         return f"<FestivalInfo fest_id={self.fest_id} fest_name={self.fest_name}>" 
-
-
-
-# class Event(db.Model):
-
-#     __tablename__ = "events"
-
-#     event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     date = db.Column(db.DateTime)
-#     time = db.Column(db.DateTime)
-#     ev_location = db.Column(db.String)
-#     sched_id = db.Column(db.Integer)
-#     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
-
-#     festival = db.relationship("festivalInfo", back_populates="event")
-
-#     #def__repr__(self):
-#         # return f"<Event event_id={self.event_id} fest_name={self.fest_name>" 
-
-
-
-# class UserEvent(db.Model):
-
-#     __tablename__ = "user events"
     
-#     user_event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     user_attending = db.Column(db.Boolean)
-#     user_id=db.Column(db.Integer, db.ForeignKey('users.user_id'))
-#     event_id=db.Column(db.Integer, db.ForeignKey('events.event_id'))
+class Event(db.Model):
 
-#     user = db.relationship("user", back_populates="userevent")
+    __tablename__ = "events"
 
-#     # sched_id=db.Column(db.Integer, db.ForeignKey('events.sched_id'))
+    event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
 
-#     #def__repr__(self):
-#         # return f"<User_event_id={self.user_event_id} user_attenting={self.user_attenting>" 
-
+    user = db.relationship("User", back_populates="events")
+    festival = db.relationship("FestivalInfo", back_populates="events")
 
 
 class Post(db.Model):
@@ -78,18 +59,35 @@ class Post(db.Model):
 
     post_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     content = db.Column(db.String(300))
-    # post_time = db.Column(db.DateTime, default=datetime.utcnow)
-    # fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    username = db.Column(db.Integer, db.ForeignKey('users.username'))
-    # likes = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    likes = db.Column(db.Integer, default=0)
+
+    user = db.relationship("User", back_populates="post")
+
 
     def __repr__(self):
         return f"<Post(post_id={self.post_id}, content='{self.content}, likes={self.likes})>"
+    
 
-    # festivals = db.relationship("festivalInfo", back_populates="post")
-    # users = db.relationship("User", back_populates="Post")
+class FestPost(db.Model):
 
+    __tablename__ = "festposts"
+
+    festpost_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    content = db.Column(db.String(300))
+    fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    # username = db.Column(db.Integer, db.ForeignKey('users.username'))
+    likes = db.Column(db.Integer, default=0)
+
+    user = db.relationship("User", back_populates="festpost")
+    festival = db.relationship("FestivalInfo", back_populates="festposts")
+
+
+    def __repr__(self):
+        return f"<FestPost(festpost_id={self.festpost_id}, content='{self.content}, likes={self.likes})>" 
+# fest_id={self.festivals.fest_id}
 
 
 # class Follower(db.Model):
