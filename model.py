@@ -15,13 +15,13 @@ class User(db.Model):
     password = db.Column(db.String)
     email = db.Column(db.String, unique=True)
     bio = db.Column(db.Text) 
-    # phone_num = db.Column(db.Integer())
-    # dob = db.Column(db.Integer())
     avatar = db.Column(db.String) #path to the file
     
     post = db.relationship("Post", back_populates="user")
     festpost = db.relationship("FestPost", back_populates="user")
     events = db.relationship("Event", back_populates="user")
+    postlikes = db.relationship("PostLike", back_populates="user")
+    festpostlikes = db.relationship("FestPostLike", back_populates="user")
 
 
 class FestivalInfo(db.Model):
@@ -61,14 +61,24 @@ class Post(db.Model):
     content = db.Column(db.String(300))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-    likes = db.Column(db.Integer, default=0)
+    like_count = db.Column(db.Integer, default=0)
 
     user = db.relationship("User", back_populates="post")
-
+    likes = db.relationship("PostLike", back_populates="post")
 
     def __repr__(self):
         return f"<Post(post_id={self.post_id}, content='{self.content}, likes={self.likes})>"
-    
+
+
+class PostLike(db.Model):
+    __tablename__ = "postlikes"
+
+    postlike_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.post_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    post = db.relationship("Post", back_populates="likes")
+    user = db.relationship("User", back_populates="postlikes")
 
 class FestPost(db.Model):
 
@@ -78,16 +88,25 @@ class FestPost(db.Model):
     content = db.Column(db.String(300))
     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    # username = db.Column(db.Integer, db.ForeignKey('users.username'))
-    likes = db.Column(db.Integer, default=0)
+    like_count = db.Column(db.Integer, default=0)
 
     user = db.relationship("User", back_populates="festpost")
     festival = db.relationship("FestivalInfo", back_populates="festposts")
+    likes = db.relationship("FestPostLike", back_populates="festpost")
 
 
     def __repr__(self):
         return f"<FestPost(festpost_id={self.festpost_id}, content='{self.content}, likes={self.likes})>" 
-# fest_id={self.festivals.fest_id}
+
+class FestPostLike(db.Model):
+    __tablename__ = "festpostlikes"
+
+    festpostlike_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    festpost_id = db.Column(db.Integer, db.ForeignKey('festposts.festpost_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    festpost = db.relationship("FestPost", back_populates="likes")
+    user = db.relationship("User", back_populates="festpostlikes")
 
 
 # class Follower(db.Model):

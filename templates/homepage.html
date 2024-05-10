@@ -5,34 +5,27 @@
 {% block head %}{% endblock %}
 
 {% block body %}
-<h1>Feed</h1>
 
-  <div class="wrapper">
-    <form action="/create_post" method="POST">
-      <div class="input-box">
-        <input type="text" name="content" id="post-content" placeholder="Share your thoughts on upcoming Festivals!"/>
-      </div>
-      <button type="submit" class="btn">POST</button>
-    </form>
-  </div>
-  
-  
-  <div class="input-box">
-    <p>
-      <div id="post-results">
-        <img src="/static/goofygoober.png" class="avatar"> : <script src="/static/posts.js"></script>
-      </div>
-    </p>
-  </div>
-  <!-- <div class="wrapper">
+<!-- <div class="wrapper"> -->
+  <div class="make-post">
     <div class="input-box">
-      <div id="post-results">
-        <img src="/static/goofygoober.png" class="user-pic">
-      </div>
-      <script src="/static/posts.js"></script>
+      <form action="/create_post" method="POST" id="post-form">
+        <input type="text" name="content" id="post-content" placeholder="Share your thoughts on upcoming Festivals!"/>
+        <button class="post-btn" type="submit">POST</button>
+      </form>
     </div>
-  </div> -->
+  </div>
+<!-- </div>  -->
 
+<!-- <div class="wrapper"> -->
+  <div class="post">
+      <div class="post-containter">
+        <div id="post-results"</div>
+      </div>
+  </div>
+<!-- </div>  -->
+
+<script src="/static/posts.js"></script> 
 {% endblock %}
-<!-- <script src="/static/scripts.js"></script> -->
+
 {% block after_body %}{% endblock %}

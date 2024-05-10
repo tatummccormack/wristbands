@@ -16,36 +16,28 @@
       <p class="flash-msg">
         {{ msg }}
       </p>
-    {% endfor %}
+    {% endfor %} 
 
-    <div class="drop">
-      <nav>
+    <div class="wrapper">
+      <div class="sidebar">
         <img src="" class="wristbands">
   
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/festivals">Festivals</a></li>
-          <li><a href="/search">Search</a></li>
-          <li><a href="/profile">Profile</a></li>
-          <li><a href="/logout">Logout</a></li>
-
-  
-          <!-- <div class="search">
-              <button type="submit" class="btn"><i class='bx bxs-lock-alt'></i></button>
-          </div> -->
+          <li><a href="/home"><i class='bx bx-home'></i>Home</a></li>
+          <li><a href="/festivals"><i class='bx bx-speaker'></i>Festivals</a></li>
+          <li><a href="/search"><i class='bx bx-search-alt'></i>Search</a></li>
+          <li><a href="/profile"><i class='bx bx-user-circle'></i>Profile</a></li>
+          <li><a href="/logout"><i class='bx bx-user-x'></i>Logout</a></li>
         </ul>
-        <!-- {% block head %}{% endblock %} -->
-        <!-- <box-icon type='solid' name='user-circle'></box-icon> -->
-        <!-- <img src="images/user.png" class="user-pic"> -->
-  
-      </nav>
+
+      </div>
+
     </div>
-
- 
-
+    {# block search_bar #}
+    {% block body %}{% endblock %}
   </body>
 </html>
 
-{% block body %}{% endblock %}
+
 
 

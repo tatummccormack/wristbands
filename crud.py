@@ -1,4 +1,4 @@
-from model import db, User, FestivalInfo, connect_to_db, Post, FestPost, Event
+from model import db, User, FestivalInfo, connect_to_db, Post, FestPost, Event, PostLike, FestPostLike
 # ^, Event, UserEvent, 
 
 
@@ -62,6 +62,19 @@ def get_post_by_id(post_id):
 def get_all_posts():
     return Post.query.order_by(Post.created_at.desc()).all()
 
+# the following two functions can apply to FestPostLike table
+def create_post_like(user_id, post_id):
+    new_like = PostLike(user_id=user_id, post_id=post_id)
+    db.session.add(new_like)
+    db.session.commit()
+    return new_like
+
+def delete_post_like(user_id, post_id):
+    del_like = PostLike.query.filter( (PostLike.user_id == user_id) & (PostLike.post_id == post_id) ).all()
+    for like in del_like:
+        db.session.delete(like)
+    db.session.commit()
+    return del_like
 
 def createFest_post(content, user_id, fest_id):
     new_f_post = FestPost(content=content, user_id=user_id, fest_id=fest_id)
@@ -91,8 +104,7 @@ def attend_festival(user_id, fest_id):
     db.session.commit()
     return True
 
-def unattend_festival(user_id, fest_id):
-    
+def unattend_festival(user_id, fest_id): 
     event = Event.query.filter_by(user_id=user_id, fest_id=fest_id).first()
     if event:
         db.session.delete(event)
@@ -100,6 +112,13 @@ def unattend_festival(user_id, fest_id):
         return True
     else:
         return False 
+
+def check_if_attending_fest(user_id, fest_id):
+    event = Event.query.filter_by(user_id=user_id, fest_id=fest_id).first()
+    if event:
+        return True
+    else:
+        return False
 
 # def get_all_posts_by_fest(fest_id):
 #     return FestPost.query.get(fest_id)

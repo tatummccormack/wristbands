@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, flash, session, redirect, jsonify, url_for
-from model import connect_to_db, db, User, FestivalInfo, Post, FestPost, Event
+from model import connect_to_db, db, User, FestivalInfo, Post, FestPost, Event, PostLike, FestPostLike
+
 import crud
 
 from jinja2 import StrictUndefined
@@ -10,12 +11,12 @@ app.secret_key = "sdjhfbdhjfbfdjh"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route("/")
+@app.route("/home")
 def homepage():
     all_posts = crud.get_all_posts()
     return render_template("homepage.html", all_posts=all_posts)
 
-@app.route("/login")
+@app.route("/")
 def login():
     return render_template("login.html")
 
@@ -31,7 +32,7 @@ def process_login():
     else:
         session["user_email"] = user.email
         # flash(f"Welcome back, {user.username}!")
-        return redirect("/")
+        return redirect("/home")
     return redirect("/search")
 
 @app.route("/register")
@@ -41,7 +42,7 @@ def register():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect("/login")
+    return redirect("/")
 
 @app.route("/profile")
 def profile_page():
@@ -87,9 +88,9 @@ def search_results():
         }
         results.append(festlo)
 
-    print(festival_results)
-    print(results)
     return jsonify(results)
+
+
 
 @app.route("/fest-results.json", methods=["POST"])
 def fest_results():
@@ -114,16 +115,6 @@ def fest_results():
     print(festival_results)
     print(results)
     return jsonify(results)
-
-
-
-
-
-# @app.route("/register", methods=["POST"])
-# def register():
-#     new_user = request.json
-#     users.append(new_user)
-#     return redirect("/login")
 
 
 
@@ -171,7 +162,7 @@ def create_post():
     print(user.user_id)
     crud.create_feed_post(content, user.user_id)
 
-    return redirect('/')
+    return redirect('/home')
 
 @app.route('/post-results.json', methods=['GET'])
 def get_posts():
@@ -181,12 +172,12 @@ def get_posts():
 
     for post in posts:
         current_post = {
-            "avatar":post.avatar,
+            # "avatar":post.avatar,
             "content":post.content, 
             "user_id":post.user_id, 
             "post_id":post.post_id, 
             "username":post.user.username, 
-            "likes": post.likes
+            "like_count": post.like_count
         }
 
         allposts.append(current_post)
@@ -197,8 +188,6 @@ def get_posts():
 @app.route('/createFest_post', methods=['POST'])
 def createFest_post():
 
-    # TODO - update this to work with fest post submit form in festival_details.html
-
     fest_id = request.form.get('fest_id')
     content = request.form.get('content')
     user = crud.get_user_by_email(session["user_email"])
@@ -207,7 +196,6 @@ def createFest_post():
     print(user.user_id)
 
     crud.createFest_post(content, user.user_id, fest_id)
-    # FestivalInfo.fest_id
 
     return redirect(url_for('show_fest', fest_id=fest_id))
 
@@ -235,14 +223,23 @@ def get_festposts(fest_id):
 
 @app.route('/like/<int:post_id>', methods=['POST'])
 def like_post(post_id):
-    print(post_id)
+
     post = crud.get_post_by_id(post_id)
-    print(post.likes)
-    post.likes += 1
-    print(post.likes)
-    db.session.add(post)
-    db.session.commit()
-    return 'Success!'
+    user = crud.get_user_by_email(session["user_email"])
+    user_has_liked = PostLike.query.filter( (PostLike.user_id == user.user_id) & (PostLike.post_id == post.post_id) ).all()
+
+    if not user_has_liked:
+        new_like = crud.create_post_like(user.user_id, post.post_id)
+        print(post.like_count)
+        post.like_count += 1
+        db.session.add(post)
+        db.session.commit()
+        print(user_has_liked)
+        return jsonify({'added': 'Success!'})
+    else:
+        # create crud delete_post_like()
+        crud.delete_post_like(user.user_id, post.post_id)
+        return jsonify({'added': 'Unliked'})
 
 @app.route('/comment/<int:post_id>', methods=['POST'])
 def add_comment(post_id):
@@ -257,25 +254,22 @@ def add_comment(post_id):
             return '' 
         
 
-@app.route('/attend-festival/<int:fest_id>', methods=['POST'])
+@app.route('/attend-festival/<int:fest_id>', methods=['POST', 'DELETE'])
 def attend_festival_route(fest_id):
-    user = crud.get_user_by_email(session["user_email"])  
-
-    if crud.attend_festival(user.user_id, fest_id):  
-        return jsonify({'message': 'Successfully attending the festival'}), 200
+    if request.method == 'POST':
+        user = crud.get_user_by_email(session["user_email"])  
+        if crud.attend_festival(user.user_id, fest_id):  
+            return jsonify({'message': 'Successfully attending the festival'}), 200
+        else:
+            return jsonify({'error': 'User is already attending the festival'}), 400
     else:
-        return jsonify({'error': 'User is already attending the festival'}), 400
-    
+        user = crud.get_user_by_email(session["user_email"])
 
-@app.route('/unattend-festival/<int:fest_id>', methods=['DELETE'])
-def unattend_festival_route(fest_id):
-    
-    user = crud.get_user_by_email(session["user_email"])
+        if crud.unattend_festival(user.user_id, fest_id):
+            return jsonify({'message': 'Successfully unattended the festival'}), 200
+        else:
+            return jsonify({'error': 'User is not attending the festival'}), 400
 
-    if crud.unattend_festival(user.user_id, fest_id):
-        return jsonify({'message': 'Successfully unattended the festival'}), 200
-    else:
-        return jsonify({'error': 'User is not attending the festival'}), 400
     
 
 @app.route('/attending-festivals.json', methods=['GET'])
@@ -344,7 +338,12 @@ def all_festivals():
 @app.route("/festivals/<fest_id>")
 def show_fest(fest_id):
     festival = crud.get_fest_by_id(fest_id)
-    return render_template("festival_details.html", festival=festival)
+    user = crud.get_user_by_email(session["user_email"])
+    attend = crud.check_if_attending_fest(user.user_id, festival.fest_id)
+    #check if user is attending this festival
+    #set a variable that stores that result
+    #pass it to the render_template
+    return render_template("festival_details.html", festival=festival, attend=attend)
 
 
 

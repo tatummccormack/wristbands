@@ -10,10 +10,64 @@
 
 <div class="profile"> 
 
-    <h1 class="username">{{ user.username }}</h1>
+    <div class="card">
+       
+        <div class="setting-icon">
+            
 
-    <img src="/static/goofygoober.png" class="avatar">
+                <button class="follow-button followed">Unfollow</button>
+        
+                <script src="/static/follow.js"></script>
 
+            
+        </div>
+
+        <img src="/static/goofygoober.png" class="profile-avatar">
+        
+
+        <div class="bio">
+            <h1 class="username">@{{ user.username }}</h1>
+            <p>i love music and this and that and this and that and this and that and this and that</p>
+            
+        </div>
+        
+        <div class="followers">
+            <p>31 Followers</p>
+        </div>
+
+        <div class="followers2">
+            <p>Following 25</p>
+        </div>
+
+
+        <div class="prof-bottom">
+        
+            <div class="attend">
+                <div id="attending-festivals">
+                    <div class="headblock">
+                        <h2>Attending Festivals</h2>
+                    </div>
+                    
+                    <ul>
+                        {% for festival in attending_festivals %}
+                            <li>{{ festival.fest_name }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block after_body %}{% endblock %}
+
+
+<div class="follow-button">
     <h2 class="followers">
 
         <button class="follow-button followed">Unfollow</button>
@@ -25,79 +79,22 @@
             <div id="following-results"></div>
         </div>
     </h2>
-
-    <div id="attending-festivals">
-        <h2>Attending Festivals</h2>
-        <ul>
-            {% for festival in attending_festivals %}
-                <li>{{ festival.fest_name }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    
-
-    {% if user.bio %}
-    <div class="wrapper">
-        <div class="input-box">
-            <form action="/edit_bio" method="POST">
-                <label for="bio">Bio:</label><br>
-                <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea>
-                <button type="submit">Save Bio</button>
-            </form>
-            {% else %}
-            <form action="/edit_bio" method="POST">
-                <label for="bio">Bio:</label><br>
-                <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea>
-                <button type="submit">Save Bio</button>
-            </form>
-        </div>
-    </div>
-    {% endif %}
-    
-    <!-- <input type="text" placeholder="BIO" name="content" required>
-        <button onclick="showEditForm()">Edit Bio</button>
-        <div id="edit-form-container" style="display: none;">
-            <textarea id="bio-textarea" rows="4" cols="50"></textarea>
-            <button onclick="updateBio()">Save</button>
-        </div> -->
-
-    <!-- <script src="/static/profile.js"></script> -->
-<!--     
-    <h3 class="bio">
-        <form action="/create_bio" method="POST">
-            <h1>Bio</h1>
-
-            <div class="input-box">
-                <input type="text" name="content" id="bio-content" placeholder="Tell us about yourself!"> 
-            </div>
-            <button type="submit" class="btn">Edit</button>
-        </form>
-            
-    </h3> -->
-    
-    <!-- </h2> -->
-
-    <!-- <h3 class="posts">
-
-        <div class="posts" id="posts">
-            <h2>Posts</h2>
-            <div id="post-results"></div>
-    
-            <script src="/static/posts.js"></script>
-        </div>
-
-        <form id="postForm">
-            <textarea id="postContent" rows="4" cols="50" placeholder="POST"></textarea><br>
-            <button type="submit">Submit</button>
-        </form> 
-    </h3> -->
-    <a href="/logout">Logout</a>
-
 </div>
+<!-- <a href="/logout">Logout</a> -->
 
-{% endblock %}
-
-{% block after_body %}{% endblock %}
-
-
-
+        <!-- {% if user.bio %}
+            <div class="bio">
+                
+                <form action="/edit_bio" method="POST">
+                    <label for="bio">Bio:</label><br>
+                    <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea>
+                    <button type="submit">Save Bio</button>
+                </form>
+                {% else %}
+                <form action="/edit_bio" method="POST">
+                    <label for="bio">Bio:</label><br>
+                    <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea>
+                    <button type="submit">Save Bio</button>
+                </form>
+            </div>
+        {% endif %} -->
