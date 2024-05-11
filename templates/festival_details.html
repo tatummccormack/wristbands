@@ -5,9 +5,11 @@
 {% block head %}{% endblock %}
 
 {% block body %}
+
 <div class="fest-details">
 
   <div class="fest-head">
+
     <div class="info">
       <i class='bx bxs-map'></i> {{ festival.fest_location }}
     </div>
@@ -16,17 +18,20 @@
       <i class='bx bxs-calendar'></i> {{ festival.fest_startdate.strftime('%m/%d/%y') }} - {{ festival.fest_enddate.strftime('%m/%d/%y')}}
     </div>
 
-{% if attend %}
-<div class="info">
-  <button class="attending-button attending">Attending</button>  
-</div>
-{% else %}
-<div class="info">
-  <button class="attending-button">Attend</button>  
-</div>
-{% endif %}
 
-  
+    {% if attend %}
+
+    <div class="info">
+      <button class="attending-button attending">Attending</button>  
+    </div>
+
+    {% else %}
+
+    <div class="info">
+      <button class="attending-button">Attend</button> 
+    </div>
+
+    {% endif %}
 
     <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
 
@@ -34,12 +39,11 @@
 
 </div>
 
+
 <script src="/static/attend.js"></script>
 
 <div class="fest-details">
-
   <div class="create-post">
-
     <div class="input-box">
 
       <form action="/createFest_post" method="POST">
@@ -47,31 +51,23 @@
           <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
           <button class="post-btn" type="submit">POST</button>
       </form>
+
     </div>
   </div>
 </div>
 
-  <div class="fest-details">
-    <div class="post-containter">
-      <div id="festpost-results"</div>
-    </div>
-    <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
+<div class="fest-details">
+
+  <div class="post-containter">
+    <div id="festpost-results"></div>
   </div>
+
+  <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
+
 </div>
 
 <script src="/static/fest_posts.js"></script>
-<!-- <div id="post-box">
-  <div class="wrapper">
-    <div class="input-box">
-    <p>
-      <img src="/static/goofygoober.png" class="user-pic">
-      <div id="festpost-results"></div>
-    </p>
-    <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
-    <script src="/static/fest_posts.js"></script>
-  </div>
-</div> -->
-<!-- <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}"> -->
+
 {% endblock %}
 
 {% block after_body %}{% endblock %}

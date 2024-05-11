@@ -53,7 +53,6 @@
 
 
 <div class="profile"> 
-
     <div class="prof-card">
        
         <div class="setting-icon">
@@ -63,9 +62,6 @@
             <script src="/static/follow.js"></script>
 
         </div>
-
-        <!-- <img src="/static/goofygoober.png" class="profile-avatar"> -->
-        <!-- <img src="{{ user.avatar }}" class="profile-avatar"> -->
 
         <!-- Trigger/Open The Modal -->
         <span id="myBtn">
@@ -87,14 +83,17 @@
         </div>
 
         <div class="bio">
+
             <h1 class="username">@{{ user.username }}</h1>
             <p>i love music and this and that and this and that and this and that and this and that</p>
             
         </div>
+
         
         <div class="followers">
             <p>31 Followers</p>
         </div>
+
 
         <div class="followers2">
             <p>Following 25</p>
@@ -102,9 +101,10 @@
 
 
         <div class="prof-bottom">
-        
             <div class="attend">
+
                 <div id="attending-festivals">
+
                     <div class="headblock">
                         <h2>Attending Festivals</h2>
                     </div>
@@ -116,12 +116,14 @@
                     </ul>
 
                 </div>
-            </div>
 
+            </div>
         </div>
 
     </div>
 </div>
+
+
 
 <script>
     // Get the modal
@@ -159,7 +161,7 @@
 
 {% endblock %}
 
-
+<!-- 
 <div class="follow-button">
     <h2 class="followers">
 
@@ -172,22 +174,5 @@
             <div id="following-results"></div>
         </div>
     </h2>
-</div>
-<!-- <a href="/logout">Logout</a> -->
+</div> -->
 
-        <!-- {% if user.bio %}
-            <div class="bio">
-                
-                <form action="/edit_bio" method="POST">
-                    <label for="bio">Bio:</label><br>
-                    <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea>
-                    <button type="submit">Save Bio</button>
-                </form>
-                {% else %}
-                <form action="/edit_bio" method="POST">
-                    <label for="bio">Bio:</label><br>
-                    <textarea name="bio" rows="4" cols="50">{{ user.bio }}</textarea>
-                    <button type="submit">Save Bio</button>
-                </form>
-            </div>
-        {% endif %} -->

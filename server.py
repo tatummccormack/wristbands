@@ -77,20 +77,20 @@ def profile_page():
     attending_festivals = crud.get_attending_festivals(user.user_id)
     return render_template("profile.html", user=user, attending_festivals=attending_festivals)
 
-# @app.route('/update_bio', methods =["POST"])
-# def update_bio(user_id):
+@app.route('/update_bio', methods =["POST"])
+def update_bio(user_id):
 
-#     new_bio = request.form.get['bio']
-#     if len(new_bio) > 200: 
-#         return "Maximum Character limit 200"
+    new_bio = request.form.get['bio']
+    if len(new_bio) > 200: 
+        return "Maximum Character limit 200"
     
-#     user = crud.get_user_by_id(user_id)
+    user = crud.get_user_by_id(user_id)
 
-#     if not user: 
-#         return "User Not Found"
+    if not user: 
+        return "User Not Found"
     
-#     user['bio'] = new_bio
-#     return redirect("/profile")
+    user['bio'] = new_bio
+    return redirect("/profile")
 
 @app.route("/search")
 def search():

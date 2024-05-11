@@ -37,6 +37,7 @@ function likePost(post_id) {
     .catch(error => console.error('Error:', error));
 }
 
+
 function fetchResults() {
     fetch('/post-results.json', {
         method: 'GET'
@@ -57,15 +58,18 @@ function fetchResults() {
             postElement.innerHTML = `
                 <div class="post-container">
                     <div class="content">
+
                         <div class="post-avatar"> <img src=${post.avatar}> </div>
                         <div class="username">@${post.username}</div>
                         <p>${post.content}</p>
+
                         <div class="iconbx">
                             <div class"commentbtn"><i class='bx bx-message-dots bx-flip-horizontal'></i></div>
                             <div class"sharebtn"><i class='bx bx-share'></i></div>
                             <button class="heartbtn" onclick="likePost(${post.post_id})"><i class='bx bx-heart' id="heart-${post.post_id}"></i>
                             <span><span id="likes-count-${post.post_id}"> ${post.like_count} </span></span></button>
                         </div>
+
                     </div>
                 </div>
             `;
@@ -75,70 +79,3 @@ function fetchResults() {
     })
     .catch(error => console.error('Error:', error));
 }
-
-/* <div class="content">
-<div class="username">@${post.username}:</div>
-${post.content}
-<button onclick="likePost(${post.post_id})"><i class='bx bx-heart' id="heart-${post.post_id}"></i></button>
-<div class="likes"><span><span id="likes-count-${post.post_id}">${post.like_count}</span></span></div>
-</div>
-`;  */
-
-// function fetchResults() {
-
-
-//     fetch('/post-results.json', {
-//         method: 'GET'
-//     })
-//     .then((response) => response.json())
-//     .then((results) => {
-//         //select the empty div, save it in a variable
-//         post_results = document.querySelector('#post-results')
-//         //for loop over results
-//         for (const post of results) {
-//             // console.log(post)
-//             post_results.insertAdjacentHTML('beforeend', 
-//             `<div>
-//                 <h3>@${post.username}</h3>
-//                 <p>${post.content}</p>
-//                 <button onclick="likePost(${post.post_id})">Like</button>
-//                 <span><span id="likes-count-${post.post_id}">${post.likes}</span></span>
-//             </div>`)
-//         }
-//             //insert some html using the result
-
-//         console.log(results);
-//     });
-    
-// }
-
-// ${post.avatar}
-
-
-// postForm.addEventListener('submit', (evt) => {
-    // evt.preventDefault();
-    // const formInputs = {
-    //     post_id: document.querySelector('#post_id').value
-    // }
-
-
-// function addComment(post_id) {
-//     const commentInput = document.getElementById(`comment-input-${post_id}`);
-//     const comment = commentInput.value.trim();
-//     if (comment !== '') {
-//         fetch(`/comment/${post_id}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ comment })
-//         })
-//         .then(() => {
-//             // Clear the comment input field
-//             commentInput.value = '';
-//             // Reload posts to display new comment
-//             getPosts();
-//         })
-//         .catch(error => console.error('Error:', error));
-//     }
-// }

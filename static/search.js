@@ -13,6 +13,7 @@ searchForm.addEventListener('submit', (evt) => {
                 'Content-Type': 'application/json',
                 },
 })
+
     .then((response) => response.json())
     .then((results) => {
         //select the empty div, save it in a variable

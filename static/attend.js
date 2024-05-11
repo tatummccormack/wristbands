@@ -15,6 +15,7 @@ function attendUnattend(button) {
             'Content-Type': 'application/json'
         }
     })
+
     .then(response => {
         if (response.ok) {
             button.classList.toggle("attending");
@@ -24,5 +25,6 @@ function attendUnattend(button) {
             throw new Error('Failed to attend/unattend festival');
         }
     })
+    
     .catch(error => console.error('Error attending/unattending festival:', error));
 }

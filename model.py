@@ -24,6 +24,18 @@ class User(db.Model):
     festpostlikes = db.relationship("FestPostLike", back_populates="user")
 
 
+class Event(db.Model):
+
+    __tablename__ = "events"
+
+    event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
+
+    user = db.relationship("User", back_populates="events")
+    festival = db.relationship("FestivalInfo", back_populates="events")
+
+
 class FestivalInfo(db.Model):
 
     __tablename__ = "festivals"
@@ -40,17 +52,36 @@ class FestivalInfo(db.Model):
 
     def __repr__(self):
         return f"<FestivalInfo fest_id={self.fest_id} fest_name={self.fest_name}>" 
+
     
-class Event(db.Model):
+class FestPost(db.Model):
 
-    __tablename__ = "events"
+    __tablename__ = "festposts"
 
-    event_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    festpost_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    content = db.Column(db.String(300))
     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    like_count = db.Column(db.Integer, default=0)
 
-    user = db.relationship("User", back_populates="events")
-    festival = db.relationship("FestivalInfo", back_populates="events")
+    user = db.relationship("User", back_populates="festpost")
+    festival = db.relationship("FestivalInfo", back_populates="festposts")
+    likes = db.relationship("FestPostLike", back_populates="festpost")
+
+
+    def __repr__(self):
+        return f"<FestPost(festpost_id={self.festpost_id}, content='{self.content}, likes={self.likes})>" 
+    
+
+class FestPostLike(db.Model):
+    __tablename__ = "festpostlikes"
+
+    festpostlike_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    festpost_id = db.Column(db.Integer, db.ForeignKey('festposts.festpost_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    festpost = db.relationship("FestPost", back_populates="likes")
+    user = db.relationship("User", back_populates="festpostlikes")
 
 
 class Post(db.Model):
@@ -79,57 +110,6 @@ class PostLike(db.Model):
 
     post = db.relationship("Post", back_populates="likes")
     user = db.relationship("User", back_populates="postlikes")
-
-class FestPost(db.Model):
-
-    __tablename__ = "festposts"
-
-    festpost_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    content = db.Column(db.String(300))
-    fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    like_count = db.Column(db.Integer, default=0)
-
-    user = db.relationship("User", back_populates="festpost")
-    festival = db.relationship("FestivalInfo", back_populates="festposts")
-    likes = db.relationship("FestPostLike", back_populates="festpost")
-
-
-    def __repr__(self):
-        return f"<FestPost(festpost_id={self.festpost_id}, content='{self.content}, likes={self.likes})>" 
-
-class FestPostLike(db.Model):
-    __tablename__ = "festpostlikes"
-
-    festpostlike_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    festpost_id = db.Column(db.Integer, db.ForeignKey('festposts.festpost_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
-    festpost = db.relationship("FestPost", back_populates="likes")
-    user = db.relationship("User", back_populates="festpostlikes")
-
-
-# class Follower(db.Model):
-
-#     __tablename__ = "followers"
-
-#     following_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     follower_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-#     followee_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
-
-
-# class FestivalLike(db.Model):
-
-#     __tablename__ = "festival likes"
-
-#     like_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
-#     festival= db.relationship("festivalinfo", back_populates="festivallike")
-#     users = db.relationship("user", back_populates="festivalpost")
-
 
 
 def connect_to_db(flask_app, db_uri="postgresql:///ratings", echo=True):
