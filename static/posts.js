@@ -57,13 +57,14 @@ function fetchResults() {
             postElement.innerHTML = `
                 <div class="post-container">
                     <div class="content">
+                        <div class="post-avatar"> <img src=${post.avatar}> </div>
                         <div class="username">@${post.username}</div>
-                        ${post.content}
+                        <p>${post.content}</p>
                         <div class="iconbx">
-                            <div class="icons">
-                            <button class="heartbtn" onclick="likePost(${post.post_id})"><i class='bx bx-heart' id="heart-${post.post_id}"></i></button>
-                            <span><span id="likes-count-${post.post_id}">${post.like_count}</span></span>
-                            </div>
+                            <div class"commentbtn"><i class='bx bx-message-dots bx-flip-horizontal'></i></div>
+                            <div class"sharebtn"><i class='bx bx-share'></i></div>
+                            <button class="heartbtn" onclick="likePost(${post.post_id})"><i class='bx bx-heart' id="heart-${post.post_id}"></i>
+                            <span><span id="likes-count-${post.post_id}"> ${post.like_count} </span></span></button>
                         </div>
                     </div>
                 </div>

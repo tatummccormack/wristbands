@@ -2,7 +2,7 @@
 
 // const myTimeout = setTimeout(fetchResults, 3000);
 
-setTimeout(fetchResults, 3000)
+setTimeout(fetchResults, 500)
 
 function fetchResults() {
 

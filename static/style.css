@@ -34,7 +34,7 @@ body {
     border-radius: 30px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     top: 50%;
-    left: 30px; 
+    left: 70px; 
     transform: translateY(-50%);
 }
 
@@ -66,18 +66,35 @@ body {
     background-color: rgb(118, 176, 103);
 }
 
+.logo {
+    position: fixed;
+    height: 20%;
+    width: 300px;
+    background-color: transparent;
+    border: none;
+    margin-left: 70px;
+    margin-top: 28px;
+}
+
+.logo-img{
+    height: 70%;
+    width: 70%;
+    margin-left: 44px;
+}
+
 
 
 
 .make-post {
-    margin-top: 30px;
+    margin-top: 40px;
     width: 60%;
     height: 130px;
-    margin-left: 21%;
+    margin-left: 440px;
     color: #333;
     padding: 20px;
     background: rgb(118, 176, 103);
     border-radius: 20px;
+    margin-bottom: 57px;
 }
 
 .make-post .input-box {
@@ -122,12 +139,10 @@ body {
 }
 
 
-
-
 .post-container {
     width: 60%;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
     line-height: 1.5;   
     padding: 10px; 
     border: 1px solid #ccc; 
@@ -135,37 +150,71 @@ body {
     background-color: rgb(255, 255, 255); 
     text-align: left; 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
-    margin-left: 21%;
+    margin-left: 440px;
+    align-items: center;
+    display: flex;
 }
 
-.post .post-container .content {
+.post-container .content {
+    width:100%;
+    height: 100%;
     border: none;
     outline: none;
     font-size: 14px;
     padding: 10px;
+    
+    /* margin-left: 3.5%; */
 } 
 
-.post .post-container .content .username {
-    font-size: 20px;
+.post-container .content p{
+    margin-left: 5%;
+    margin-bottom: 5px;
+    font-size: 13.5px;
 }
 
-.post .post-container .content .iconbx {
-    margin-left: 97%;
-    margin-bottom: 2px;
-    border: none;
-    outline: none;
-    background-color: transparent;
-} 
+.post-container .content .username {
+    margin-left: 4.8%;
+    font-size: 20px;
+    margin-top: -5.1%;
+    word-spacing: -5px;
+    margin-bottom: -.1%;
+}
 
-.post .post-container .content .iconbx .icons {
+ .content .iconbx {
+    padding: 2px 2px;
+    width: 100%;
+    height: 40px;
     border: none;
     outline: none;
     background-color: transparent;
-} 
+    margin-bottom: -2.5%;
+    display: flex;
+    justify-content: space-around; /* To evenly space the icons */
+    align-items: center;
+}  
+
+.commentbtn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.sharebtn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
 
 .heartbtn {
     border: none;
-    background: transparent;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.post-avatar img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 
@@ -305,11 +354,12 @@ body {
     margin-top: 30px;
     width: 60%;
     height: 130px;
-    margin-left: 21%;
+    margin-left: 25%;
     color: #333;
     padding: 20px;
     background: rgb(118, 176, 103);
     border-radius: 20px;
+    margin-bottom: 65px;
 }
 .fest-search .input-box {
     position: relative;
@@ -359,7 +409,7 @@ body {
     margin-top: 30px;
     width: 60%;
     height: auto; 
-    margin-left: 21%;
+    margin-left: 25%;
     color: #333;
     background-color: aqua;
     padding: 20px;
@@ -409,18 +459,19 @@ body {
 .profile{
     width: 100%;
     height: 100vh;
-    background-image: url('login1.webp');
+    /* background-image: url('login1.webp');
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-    background-size: cover;
+    background-size: cover; */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.card{
-    background: red;
+.prof-card{
+    background: rgb(140, 113, 195);
+    backdrop-filter: blur(15px);
     width: 440px;
     /* text-align: center; */
     padding: 40px 90px;
@@ -435,7 +486,7 @@ body {
     position:absolute;
     left: 40px;
     top: 40px;
-    background: white;
+    background: rgb(242, 239, 223);
     border: none;
     color: black;
 }
@@ -464,9 +515,10 @@ body {
     background-color: white;
     padding: 6px;
     margin-top: -20px;
+    box-shadow: 0 2px 5px rgb(84, 12, 138);
 }
 
-.card .bio{
+.prof-card .bio{
     margin-top: 5px;
     width: 90%;
     height: 100px;
@@ -480,12 +532,14 @@ body {
 .bio h1{
     font-size: 25px;
     padding-top: 5px;
+    color: rgb(242, 239, 223);
 }
 
 .bio p{
     font-size: 13px;
     margin-top: 5px;
     padding-left: 7px;
+    color: rgb(242, 239, 223);
 }
 
 .followers{
@@ -517,7 +571,8 @@ body {
     margin-left: 193px;
     color: #333;
     padding: 10px;
-    background: rgb(118, 176, 103);
+    background: transparent;
+    backdrop-filter: blur(15px);
     border-radius: 20px;
     font-size: 10px;
     justify-content: center;
@@ -529,14 +584,14 @@ body {
     font-weight: 600;
 }
 
-.card .bio p{
+.prof-card .bio p{
     position: relative;
     margin: 0px 0px;
    
 }
 
 .prof-bottom{
-    background-color: white;
+    background-color: rgb(108, 67, 135);
     color: black;
     padding 60px 0px;
     margin-right: -90px;
@@ -566,7 +621,7 @@ body {
 
 .attend .headblock {
     width: 230px;
-    background: yellow;
+    background: rgb(242, 239, 223);
     border: none;
     color: black;
     margin-left: 98px;
@@ -581,7 +636,7 @@ body {
     padding: 10px;
     padding-left: 15px;
     padding-right: 15px;
-
+    color: rgb(84, 12, 138);
 }
 
 .attend ul li{
@@ -592,15 +647,15 @@ body {
     border-top: 1px solid rgb(225, 225, 225, .05); 
     border: 2px solid rgb(255, 255, 255);
     backdrop-filter: blur(15px);
-    background-color: red;
-    color: black;
+    background-color: rgb(242, 239, 223);
+    color: rgb(84, 12, 138);
     border-radius: 40px;
     margin-bottom: 10px;
     margin-top: 13px;
     margin-left: 5px;
     margin-right: 5px;
     font-size: 14px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1)
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -609,13 +664,13 @@ body {
     background-color: rgb(118, 176, 103);
 }
 
-.card .follow-button{
+.prof-card .follow-button{
     width: 90px;
-    background-color: white;
-    color: red;
+    background-color: rgb(242, 239, 223);
+    color: rgb(84, 12, 138);
     border: none;
     outline: none;
-    box-shadow: 0 5px 10px rgba(244, 67, 54, 0.5);
+    /* box-shadow: 0 2px 5px rgb(84, 12, 138); */
     padding: 10px 18px;
     cursor: pointer;
     border-radius: 20px;

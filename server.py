@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, flash, session, redirect, jsonify, url_for
 from model import connect_to_db, db, User, FestivalInfo, Post, FestPost, Event, PostLike, FestPostLike
+from werkzeug.utils import secure_filename
 
 import crud
+import os
 
 from jinja2 import StrictUndefined
 
@@ -11,6 +13,31 @@ app.secret_key = "sdjhfbdhjfbfdjh"
 app.jinja_env.undefined = StrictUndefined
 
 
+# user_avatars = '/static/user_avatars'
+# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+# app.config['UPLOAD_FOLDER'] = user_avatars
+
+@app.route("/handle-avatar", methods=["POST"])
+def handle_avatar():
+    file = request.files['file']
+    if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+    if file:
+        user = crud.get_user_by_email(session["user_email"])
+        filename = secure_filename(file.filename)
+        # user.avatar = filename
+        file.save(os.path.join(app.root_path, './static/user_avatars', filename))
+        # app.root_path,'/images',img.filename
+         # => "image.jpg" => '/static/user_avatars/image.jpg'
+        # if this doesn't work, try setting:
+        user.avatar = './static/user_avatars/' + filename
+        # Here you need to then query for the user in the database, and update the user's avatar to the filename
+        db.session.add(user)
+        db.session.commit()
+        return redirect("/profile")
+    
 @app.route("/home")
 def homepage():
     all_posts = crud.get_all_posts()
@@ -172,7 +199,7 @@ def get_posts():
 
     for post in posts:
         current_post = {
-            # "avatar":post.avatar,
+            "avatar":post.user.avatar,
             "content":post.content, 
             "user_id":post.user_id, 
             "post_id":post.post_id, 
