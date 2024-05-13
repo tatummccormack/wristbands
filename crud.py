@@ -112,6 +112,9 @@ def createFest_post(content, user_id, fest_id):
     db.session.commit()
     return new_f_post
 
+def get_festpost_by_id(festpost_id):
+    return FestPost.query.get(festpost_id)
+
 def get_all_fest_posts():
     return FestPost.query.all()
 
@@ -119,18 +122,6 @@ def get_all_posts_by_fest(fest_id):
     fest_id = int(fest_id)
     return FestPost.query.filter(FestPost.fest_id == fest_id).all()
 
-def create_festpost_like(user_id, festpost_id):
-    new_like = FestPostLike(user_id=user_id, festpost_id=festpost_id)
-    db.session.add(new_like)
-    db.session.commit()
-    return new_like
-
-def delete_festpost_like(user_id, festpost_id):
-    del_like = FestPostLike.query.filter( (FestPostLike.user_id == user_id) & (FestPostLike.post_id == festpost_id) ).all()
-    for like in del_like:
-        db.session.delete(like)
-    db.session.commit()
-    return del_like
 
 
     

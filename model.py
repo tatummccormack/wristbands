@@ -46,6 +46,8 @@ class FestivalInfo(db.Model):
     fest_startdate = db.Column(db.DateTime)
     fest_enddate = db.Column(db.DateTime)
     line_up = db.Column(db.String)
+    # fest_head = db.Column(db.string)
+    # lineup_img = db.Column(db.string)
 
     festposts = db.relationship("FestPost", back_populates="festival")
     events = db.relationship("Event", back_populates="festival")

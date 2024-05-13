@@ -42,8 +42,7 @@
 
 <script src="/static/attend.js"></script>
 
-<div class="fest-details">
-  <div class="create-post">
+  <div class="fest_createpost">
     <div class="input-box">
 
       <form action="/createFest_post" method="POST">
@@ -54,19 +53,53 @@
 
     </div>
   </div>
-</div>
 
-<div class="fest-details">
-
-  <div class="post-containter">
-    <div id="festpost-results"></div>
+<div class="festpost">
+  <div class="festpost-containter">
+    <div class="content">
+      <div id="festpost-results"></div>
+    </div>
   </div>
-
-  <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
-
 </div>
+
+<div class="fest-lineup">
+  <img src="/static/lineup.webp">
+</div>
+
+
+
+<div id="lineupModal" class="festmodal">
+  <span class="close">&times;</span>
+  <img class="festmodal-content" id="img01">
+</div>
+
+<!-- <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}"> -->
+
 
 <script src="/static/fest_posts.js"></script>
+
+
+
+<script>
+  // Get the modal
+  var modal = document.getElementById("lineupModal");
+  
+  // Get the image and insert it inside the modal - use its "alt" text as a caption
+  var img = document.querySelector(".fest-lineup img");
+  var modalImg = document.getElementById("img01");
+  img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+  }
+  
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+  
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() { 
+    modal.style.display = "none";
+  }
+  </script>
 
 {% endblock %}
 

@@ -1,7 +1,6 @@
 
-let postForm = document.querySelector('#post-form');
+// let postForm = document.querySelector('#post-form');
 
-// const myTimeout = setTimeout(fetchResults, 3000);
 
 setTimeout(fetchResults, 500)
 
@@ -49,12 +48,12 @@ function fetchResults() {
         
         // Clear existing posts before appending new ones
         postResultsContainer.innerHTML = '';
-
+        console.log(results)
         // Loop over each post in the results array
         results.forEach(post => {
             // Create HTML elements for each post
             const postElement = document.createElement('div');
-            postElement.classList.add('post');
+            // postElement.classList.add('post');
             postElement.innerHTML = `
                 <div class="post-container">
                     <div class="content">
@@ -78,4 +77,5 @@ function fetchResults() {
         });
     })
     .catch(error => console.error('Error:', error));
+
 }

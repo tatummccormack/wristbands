@@ -18,6 +18,32 @@ app.jinja_env.undefined = StrictUndefined
 
 # app.config['UPLOAD_FOLDER'] = user_avatars
 
+
+@app.route('/autocomplete')
+def autocomplete():
+    query = request.args.get('query', '').strip()
+    print("Query:", query)  # Print the query for debugging purposes
+    
+    if len(query) < 3:
+        return jsonify([])  # Return an empty list if the query is less than 3 characters
+    
+    # Perform a search in the festivals table based on fest_name, fest_location, and line_up
+    results = FestivalInfo.query.filter(
+        (FestivalInfo.fest_name.ilike(f'%{query}%')) |
+        (FestivalInfo.fest_location.ilike(f'%{query}%')) |
+        (FestivalInfo.line_up.ilike(f'%{query}%'))
+    ).distinct(FestivalInfo.fest_name).limit(10).all()
+    
+    print("Results:", results)  # Print the results for debugging purposes
+    
+    # Extract relevant data from the results and return as JSON
+    autocomplete_suggestions = [{'id': festival.fest_id, 'name': festival.fest_name} for festival in results]
+    return jsonify(autocomplete_suggestions)
+
+
+
+
+
 @app.route("/handle-avatar", methods=["POST"])
 def handle_avatar():
     file = request.files['file']
@@ -56,11 +82,11 @@ def process_login():
     user = crud.get_user_by_email(email)
     if not user or user.password != password:
         flash("The email or password you entered was incorrect.")
+        return redirect("/login")
     else:
         session["user_email"] = user.email
         # flash(f"Welcome back, {user.username}!")
         return redirect("/home")
-    return redirect("/search")
 
 @app.route("/register")
 def register():
@@ -92,56 +118,56 @@ def update_bio(user_id):
     user['bio'] = new_bio
     return redirect("/profile")
 
-@app.route("/search")
-def search():
-    return render_template("search.html")
+# @app.route("/search")
+# def search():
+#     return render_template("search.html")
 
-@app.route("/search-results.json", methods=["POST"])
-def search_results():
-    festival = request.json.get("fest_location")
-    festquery = f'%{festival}%'
-    festival_results = FestivalInfo.query.filter(FestivalInfo.fest_location.like(festquery)).all()
+# @app.route("/search-results.json", methods=["POST"])
+# def search_results():
+#     festival = request.json.get("fest_location")
+#     festquery = f'%{festival}%'
+#     festival_results = FestivalInfo.query.filter(FestivalInfo.fest_location.like(festquery)).all()
     
-    results = []
+#     results = []
 
-    for fest in festival_results:
-        festlo = {
-            "fest_id": fest.fest_id,
-            "fest_name": fest.fest_name, 
-            "fest_location": fest.fest_location,
-            "fest_startdate": fest.fest_startdate, 
-            "fest_enddate": fest.fest_enddate, 
-            "line_up": fest.line_up,
-        }
-        results.append(festlo)
+#     for fest in festival_results:
+#         festlo = {
+#             "fest_id": fest.fest_id,
+#             "fest_name": fest.fest_name, 
+#             "fest_location": fest.fest_location,
+#             "fest_startdate": fest.fest_startdate, 
+#             "fest_enddate": fest.fest_enddate, 
+#             "line_up": fest.line_up,
+#         }
+#         results.append(festlo)
 
-    return jsonify(results)
+#     return jsonify(results)
 
 
 
-@app.route("/fest-results.json", methods=["POST"])
-def fest_results():
-    festival = request.json.get("fest_name")
-    festquery = f'%{festival}%'
-    festival_results = FestivalInfo.query.filter(FestivalInfo.fest_name.like(festquery)).all()
+# @app.route("/fest-results.json", methods=["POST"])
+# def fest_results():
+#     festival = request.json.get("fest_name")
+#     festquery = f'%{festival}%'
+#     festival_results = FestivalInfo.query.filter(FestivalInfo.fest_name.like(festquery)).all()
     
-    results = []
+#     results = []
 
-    for fest in festival_results:
-        festlo = {
-            "fest_id": fest.fest_id,
-            "fest_name": fest.fest_name, 
-            "fest_location": fest.fest_location,
-            "fest_startdate": fest.fest_startdate, 
-            "fest_enddate": fest.fest_enddate, 
-            "line_up": fest.line_up,
-        }
+#     for fest in festival_results:
+#         festlo = {
+#             "fest_id": fest.fest_id,
+#             "fest_name": fest.fest_name, 
+#             "fest_location": fest.fest_location,
+#             "fest_startdate": fest.fest_startdate, 
+#             "fest_enddate": fest.fest_enddate, 
+#             "line_up": fest.line_up,
+#         }
         
-        results.append(festlo)
+#         results.append(festlo)
 
-    print(festival_results)
-    print(results)
-    return jsonify(results)
+#     print(festival_results)
+#     print(results)
+#     return jsonify(results)
 
 
 
@@ -229,18 +255,20 @@ def createFest_post():
 
 @app.route('/festpost-results.json/<fest_id>', methods=['GET'])
 def get_festposts(fest_id):
+
     festposts = crud.get_all_posts_by_fest(fest_id)
-    print(festposts)
     allfestposts = []
+
     if festposts:
         for fp in festposts:
             current_post = {
+                "avatar":fp.user.avatar,
                 "content":fp.content, 
                 "user_id":fp.user_id, 
                 "username":fp.user.username, 
                 "festpost_id":fp.festpost_id, 
                 "fest_id":fp.fest_id,
-                "likes": fp.likes
+                "like_count":fp.like_count
                 }
             print(current_post)
             allfestposts.append(current_post)
@@ -266,6 +294,26 @@ def like_post(post_id):
     else:
         # create crud delete_post_like()
         crud.delete_post_like(user.user_id, post.post_id)
+        return jsonify({'added': 'Unliked'})
+
+@app.route('/like/<int:festpost_id>', methods=['POST'])
+def festlike_post(festpost_id):
+
+    festpost = crud.get_festpost_by_id(festpost_id)
+    user = crud.get_user_by_email(session["user_email"])
+    user_has_liked = PostLike.query.filter( (PostLike.user_id == user.user_id) & (PostLike.post_id == festpost_id.post_id) ).all()
+
+    if not user_has_liked:
+        new_like = crud.create_post_like(user.user_id, festpost.festpost_id)
+        print(festpost.like_count)
+        festpost.like_count += 1
+        db.session.add(festpost)
+        db.session.commit()
+        print(user_has_liked)
+        return jsonify({'added': 'Success!'})
+    else:
+        # create crud delete_post_like()
+        crud.delete_post_like(user.user_id, festpost.festpost_id)
         return jsonify({'added': 'Unliked'})
 
 @app.route('/comment/<int:post_id>', methods=['POST'])
