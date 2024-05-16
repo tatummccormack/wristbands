@@ -46,8 +46,8 @@ class FestivalInfo(db.Model):
     fest_startdate = db.Column(db.DateTime)
     fest_enddate = db.Column(db.DateTime)
     line_up = db.Column(db.String)
-    # fest_head = db.Column(db.string)
-    # lineup_img = db.Column(db.string)
+    fest_head = db.Column(db.String)
+    lineup_img = db.Column(db.String)
 
     festposts = db.relationship("FestPost", back_populates="festival")
     events = db.relationship("Event", back_populates="festival")
@@ -65,6 +65,7 @@ class FestPost(db.Model):
     fest_id = db.Column(db.Integer, db.ForeignKey('festivals.fest_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     like_count = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
 
     user = db.relationship("User", back_populates="festpost")
     festival = db.relationship("FestivalInfo", back_populates="festposts")
@@ -93,7 +94,7 @@ class Post(db.Model):
     post_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     content = db.Column(db.String(300))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc), nullable=False)
     like_count = db.Column(db.Integer, default=0)
 
     user = db.relationship("User", back_populates="post")

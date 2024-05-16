@@ -13,19 +13,14 @@ app.secret_key = "sdjhfbdhjfbfdjh"
 app.jinja_env.undefined = StrictUndefined
 
 
-# user_avatars = '/static/user_avatars'
-# ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
-# app.config['UPLOAD_FOLDER'] = user_avatars
-
 
 @app.route('/autocomplete')
 def autocomplete():
     query = request.args.get('query', '').strip()
-    print("Query:", query)  # Print the query for debugging purposes
+    print("Query:", query) 
     
     if len(query) < 3:
-        return jsonify([])  # Return an empty list if the query is less than 3 characters
+        return jsonify([])  
     
     # Perform a search in the festivals table based on fest_name, fest_location, and line_up
     results = FestivalInfo.query.filter(
@@ -34,7 +29,7 @@ def autocomplete():
         (FestivalInfo.line_up.ilike(f'%{query}%'))
     ).distinct(FestivalInfo.fest_name).limit(10).all()
     
-    print("Results:", results)  # Print the results for debugging purposes
+    print("Results:", results)  
     
     # Extract relevant data from the results and return as JSON
     autocomplete_suggestions = [{'id': festival.fest_id, 'name': festival.fest_name} for festival in results]
@@ -82,7 +77,7 @@ def process_login():
     user = crud.get_user_by_email(email)
     if not user or user.password != password:
         flash("The email or password you entered was incorrect.")
-        return redirect("/login")
+        return redirect("/")
     else:
         session["user_email"] = user.email
         # flash(f"Welcome back, {user.username}!")
@@ -230,11 +225,12 @@ def get_posts():
             "user_id":post.user_id, 
             "post_id":post.post_id, 
             "username":post.user.username, 
-            "like_count": post.like_count
+            "like_count": post.like_count,
+            "created_at": post.created_at 
         }
 
         allposts.append(current_post)
-
+    print(allposts)
     return jsonify(allposts)
 
 
@@ -268,7 +264,8 @@ def get_festposts(fest_id):
                 "username":fp.user.username, 
                 "festpost_id":fp.festpost_id, 
                 "fest_id":fp.fest_id,
-                "like_count":fp.like_count
+                "like_count":fp.like_count,
+                "created_at": fp.created_at 
                 }
             print(current_post)
             allfestposts.append(current_post)
@@ -415,10 +412,11 @@ def show_fest(fest_id):
     festival = crud.get_fest_by_id(fest_id)
     user = crud.get_user_by_email(session["user_email"])
     attend = crud.check_if_attending_fest(user.user_id, festival.fest_id)
-    #check if user is attending this festival
-    #set a variable that stores that result
-    #pass it to the render_template
-    return render_template("festival_details.html", festival=festival, attend=attend)
+   
+    fest_head_url = url_for('static', filename=festival.fest_head)
+    lineup_img_url = url_for('static', filename=festival.lineup_img)
+
+    return render_template("festival_details.html", festival=festival, fest_head_url=fest_head_url, lineup_img_url=lineup_img_url, attend=attend)
 
 
 

@@ -7,8 +7,7 @@
 {% block body %}
 
 <div class="fest-details">
-
-  <div class="fest-head">
+  <div class="fest-head" style="background-image: url('{{ festival.fest_head }}')">
 
     <div class="info">
       <i class='bx bxs-map'></i> {{ festival.fest_location }}
@@ -17,7 +16,6 @@
     <div class="info">
       <i class='bx bxs-calendar'></i> {{ festival.fest_startdate.strftime('%m/%d/%y') }} - {{ festival.fest_enddate.strftime('%m/%d/%y')}}
     </div>
-
 
     {% if attend %}
 
@@ -34,25 +32,24 @@
     {% endif %}
 
     <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
-
   </div>
-
 </div>
 
 
 <script src="/static/attend.js"></script>
 
-  <div class="fest_createpost">
-    <div class="input-box">
+<div class="fest_createpost">
+  <div class="input-box">
 
-      <form action="/createFest_post" method="POST">
-          <input type="text" name="content" id="fest-post-content" placeholder="What do you think of the line up?"/>
-          <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
-          <button class="post-btn" type="submit">POST</button>
-      </form>
+    <form action="/createFest_post" method="POST">
+        <input type="text" name="content" id="fest-post-content" placeholder="Are you going to {{ festival.fest_name }}?"/>
+        <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}">
+        <button class="post-btn" type="submit">POST</button>
+    </form>
 
-    </div>
   </div>
+</div>
+
 
 <div class="festpost">
   <div class="festpost-containter">
@@ -62,9 +59,12 @@
   </div>
 </div>
 
+<script src="/static/fest_posts.js"></script>
+
 <div class="fest-lineup">
-  <img src="/static/lineup.webp">
+  <img src="{{ festival.lineup_img }}" alt="Lineup Image">
 </div>
+  
 
 
 
@@ -72,12 +72,6 @@
   <span class="close">&times;</span>
   <img class="festmodal-content" id="img01">
 </div>
-
-<!-- <input id="hidden-fest-id" name="fest_id" hidden value="{{ festival.fest_id }}"> -->
-
-
-<script src="/static/fest_posts.js"></script>
-
 
 
 <script>

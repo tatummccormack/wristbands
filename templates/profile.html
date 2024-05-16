@@ -3,95 +3,47 @@
 
 {% block title %}{% endblock %}
 
-{% block head %}
-
-<style>
-    
-    /* The Modal (background) */
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    }
-    
-    /* Modal Content */
-    .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-    
-    /* The Close Button */
-    .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    
-    .close:hover,
-    .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    </style>
-
-{% endblock %}
+{% block head %}{% endblock %}
 
 {% block body %}
 
 
 <div class="profile"> 
     <div class="prof-card">
-       
-        <div class="setting-icon">
+        <div class="follow-btn">
             
             <button class="follow-button followed">Unfollow</button>
-    
             <script src="/static/follow.js"></script>
 
         </div>
 
-        <!-- Trigger/Open The Modal -->
+        
         <span id="myBtn">
-            <img src="{{ user.avatar }}" class="profile-avatar">
+            <div class="profile-avatar-container">
+                <img src="{{ user.avatar }}" class="profile-avatar">
+            </div>
         </span>
 
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-
-            <!-- Modal content -->
+        <div id="myModal"  class="modal">
             <div class="modal-content">
+
                 <span class="close">&times;</span>
                 <form action="/handle-avatar" method=post enctype=multipart/form-data>
                     <input type=file name=file>
                     <input type=submit value=Upload>
-                  </form>
-            </div>
+                </form>
 
+            </div>
         </div>
 
         <div class="bio">
-
             <h1 class="username">@{{ user.username }}</h1>
-            <p>i love music and this and that and this and that and this and that and this and that</p>
-            
+            <p>Music festival lover but EDC takes the cake. Always chasing the next great adventure under the electric sky. 🎶✨</p>
         </div>
 
         
         <div class="followers">
-            <p>31 Followers</p>
+            <p>Followers 31</p>
         </div>
 
 
@@ -102,9 +54,7 @@
 
         <div class="prof-bottom">
             <div class="attend">
-
                 <div id="attending-festivals">
-
                     <div class="headblock">
                         <h2>Attending Festivals</h2>
                     </div>
@@ -114,9 +64,7 @@
                             <li>{{ festival.fest_name }}</li>
                         {% endfor %}
                     </ul>
-
                 </div>
-
             </div>
         </div>
 
@@ -155,24 +103,8 @@
 
 {% endblock %}
 
-{% block after_body %}
+{% block after_body %}{% endblock %}
 
 
 
-{% endblock %}
-
-<!-- 
-<div class="follow-button">
-    <h2 class="followers">
-
-        <button class="follow-button followed">Unfollow</button>
-
-        <script src="/static/follow.js"></script>
-
-        <div class="followers" id="followers">
-            <div id="followers-results"></div>
-            <div id="following-results"></div>
-        </div>
-    </h2>
-</div> -->
 

@@ -48,7 +48,6 @@ function fetchResults() {
         
         // Clear existing posts before appending new ones
         postResultsContainer.innerHTML = '';
-        console.log(results)
         // Loop over each post in the results array
         results.forEach(post => {
             // Create HTML elements for each post

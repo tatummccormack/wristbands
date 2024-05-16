@@ -20,7 +20,7 @@ def get_user_by_username(username):
 
    
 #FESTIVAL
-def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line_up):
+def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line_up, fest_head,lineup_img):
     """Make a festival info instance
      example datetime string "2024-04-25 16:46:58,421"
     """
@@ -29,10 +29,13 @@ def create_festival(fest_name, fest_location, fest_startdate, fest_enddate, line
         fest_location=fest_location,
         fest_startdate= fest_startdate,
         fest_enddate=fest_enddate,
-        line_up=line_up
+        line_up=line_up,
+        fest_head=fest_head,
+        lineup_img=lineup_img
     )
-
     return festival
+
+
 
 def get_festivals():
     return FestivalInfo.query.all()
@@ -89,7 +92,6 @@ def get_post_by_id(post_id):
 def get_all_posts():
     return Post.query.order_by(Post.created_at.desc()).all()
 
-# the following two functions can apply to FestPostLike table
 def create_post_like(user_id, post_id):
     new_like = PostLike(user_id=user_id, post_id=post_id)
     db.session.add(new_like)
@@ -120,7 +122,7 @@ def get_all_fest_posts():
 
 def get_all_posts_by_fest(fest_id):
     fest_id = int(fest_id)
-    return FestPost.query.filter(FestPost.fest_id == fest_id).all()
+    return FestPost.query.filter(FestPost.fest_id == fest_id).order_by(FestPost.created_at.desc()).all()
 
 
 
@@ -130,21 +132,3 @@ if __name__ == "__main__":
     connect_to_db(app)
 
 
-# def get_follower_by_id(follower_id):
-#     return Follower.query.get(follower_id)
-
-# def follow_user(follower_id, followee_id):
-#     existing_follower = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
-#     if existing_follower:
-#         return False
-    
-#     new_follower = Follower(follower_id=follower_id, followee_id=followee_id)
-#     db.session.add(new_follower)
-#     db.session.commit()
-
-#     return True
-                                                                                
-# def unfollow_user(follower_id, followee_id):
-#     follower_to_delete = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()
-#     if not follower_to_delete:
-#         return False

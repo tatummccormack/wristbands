@@ -55,7 +55,6 @@ function fetchResults() {
                 <div class="festpost-container">
                     <div class="content">
 
-                        <div class="festpost-avatar"> <img src=${festpost.avatar}> </div>
                         <div class="username">@${festpost.username}</div>
                         <p>${festpost.content}</p>
 
@@ -76,3 +75,6 @@ function fetchResults() {
     .catch(error => console.error('Error:', error));
 
 }
+
+
+{/* <div class="festpost-avatar"> <img src=${festpost.avatar}> </div> */}

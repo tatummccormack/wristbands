@@ -6,37 +6,17 @@
 
 {% block body %}
 
-<!-- 
-<div class="fest-search">
-    <div class="input-box">
-
-        <form id="fest-form">
-            <div class="input-box">
-                <input type="text" placeholder="Search Festivals" id="fest_name" name="fest_name">
-                <button type="submit" class="sub-btn">Search</button>
-            </div>
-        </form>
-
-        <div id="fest-results"></div>
-
-        <script src="/static/festname_search.js"></script> 
-
-    </div>
-</div> -->
-
-<!-- <script src="/static/festname_search.js"></script>  -->
-
 <div class="festival">
     <div class="fest-table">
 
         <div class="fest-row">
-
             {% for festival in festivals %}
 
             <div class="fest-cell">
                 <a href="/festivals/{{ festival.fest_id }}">
                     {{ festival.fest_name }}
                 </a>
+                <p>{{ festival.fest_location }}</p>
             </div>
 
             {% if loop.index % 2 == 0 %}
@@ -45,7 +25,6 @@
 
             {% endif %}
             {% endfor %}  
-
         </div>
 
     </div>

@@ -14,47 +14,47 @@
 </head>
 
 
-  <body>
+<body>
+  <div class="search-bar">
+    <div class="search-row">
 
-    <div class="search-bar">
-
-      <div class="search-row">
-        <input type="text" placeholder="Search Festivals" id="fest_name" name="fest_name" autocomplete="off">
-        <button type="submit" class="srch-btn"><i class='bx bx-search-alt'></i></button>
-      </div>
-
-      <div class="result-box"></div>
+      <input type="text" placeholder="Search Festivals" id="fest_name" name="fest_name" autocomplete="off">
+      <button type="submit" class="srch-btn"><i class='bx bx-search-alt'></i></button>
 
     </div>
 
-    {% for msg in get_flashed_messages() %}
-      <p class="flash-msg">
-        {{ msg }}
-      </p>
-    {% endfor %} 
+    <div class="result-box"></div>
+  </div>
+
+  {% for msg in get_flashed_messages() %}
+    <p class="flash-msg">
+      {{ msg }}
+    </p>
+  {% endfor %} 
 
 
+  <div class="wrapper">
+    <div class="sidebar">
+      <img src="/static/wristbandslogo.png" class="logo-img">
 
-    <div class="wrapper">
-      <div class="sidebar">
-        <img src="/static/wristbands.png" class="logo-img">
-  
-        <ul>
-          <li><a href="/home"><i class='bx bx-home'></i>Home</a></li>
-          <li><a href="/festivals"><i class='bx bx-speaker'></i>Festivals</a></li>
-          <li><a href="/profile"><i class='bx bx-user-circle'></i>Profile</a></li>
-          <li><a href="/logout"><i class='bx bx-user-x'></i>Logout</a></li>
-        </ul>
-
-      </div>
+      <ul>
+        <li><a href="/home"><i class='bx bx-home'></i>Home</a></li>
+        <li><a href="/festivals"><i class='bx bx-speaker'></i>Festivals</a></li>
+        <li><a href="/profile"><i class='bx bx-user-circle'></i>Profile</a></li>
+        <li><a href="/logout"><i class='bx bx-user-x'></i>Logout</a></li>
+      </ul>
 
     </div>
 
-    {# block search_bar #}
-    {% block body %}{% endblock %}
-  
-    <script src="/static/autocomplete.js"></script>
-  </body>
+  </div>
+
+  {# block search_bar #}
+  {% block body %}{% endblock %}
+
+  <script src="/static/autocomplete.js"></script>
+
+
+</body>
 </html>
 
 
