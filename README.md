@@ -1,4 +1,4 @@
-# <img src="">
+# <img src="/static/wristbandslogo.png">
 
 Wristbands stems from a childhood dream of mine to create and own my own music festival. With Music festivals taking over the music industry the demand is high and the resources are limited. That's why I created my flask app wristbands, a one stop shop for all things Music festivals. 
 
@@ -19,31 +19,31 @@ __Backend:__ Python, Flask, PostgreSQL, SQLAlchemy, Jinja<br/>
 
 Register or login to view all things festivals.  
   
-![Login/Create](/wristbands/static/readmeimg/LOGIN:CREATE.gif)
+<img src="/wristbands/static/readmeimg/LOGIN:CREATE.gif"
 <br/><br/><br/>
 Search for Festivals by name, location, date, line-up artists. 
   
-![Festival Search](/wristbands/static/readmeimg/SEARCH.gif))
+<img src="/wristbands/static/readmeimg/SEARCH.gif)"
 <br/><br/><br/>
 Make posts on homepage/general feed
   
-![Homepage Post](/wristbands/static/readmeimg/HOMEPOST.gif)
+<img src="/wristbands/static/readmeimg/HOMEPOST.gif)"
 <br/><br/><br/>
 Like/Unlike posts
   
-![Likes](/wristbands/static/readmeimg/LIKES.gif)
+<img src="/wristbands/static/readmeimg/LIKES.gif"
 <br/><br/><br/>
 Post on individual festival pages 
   
-![Festival Post](/wristbands/static/readmeimg/FESTPOST.gif)
+<img src="/wristbands/static/readmeimg/FESTPOST.gif"
 <br/><br/><br/>
 Attend or Unattend festivals to then display on profile page
 
-![Attend](/wristbands/static/readmeimg/ATTEND.gif)
+<img src="wristbands/static/readmeimg/ATTEND.gif"
 <br/><br/><br/>
 User's can update profile photo
 
-![Profile](/wristbands/static/readmeimg/PROFILE.gif)
+<img src="/wristbands/static/readmeimg/PROFILE.gif"
 
 
 
