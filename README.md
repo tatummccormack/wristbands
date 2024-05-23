@@ -23,27 +23,27 @@ Register or login to view all things festivals.
 <br/><br/><br/>
 Search for Festivals by name, location, date, line-up artists. 
   
-<img src="/wristbands/static/readmeimg/SEARCH.gif)"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/SEARCH.gif)
 <br/><br/><br/>
 Make posts on homepage/general feed
   
-<img src="/wristbands/static/readmeimg/HOMEPOST.gif)"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/HOMEPOST.gif)
 <br/><br/><br/>
 Like/Unlike posts
   
-<img src="/wristbands/static/readmeimg/LIKES.gif"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/LIKES.gif)
 <br/><br/><br/>
 Post on individual festival pages 
   
-<img src="/wristbands/static/readmeimg/FESTPOST.gif"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/FESTPOST.gif)
 <br/><br/><br/>
 Attend or Unattend festivals to then display on profile page
 
-<img src="wristbands/static/readmeimg/ATTEND.gif"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/ATTEND.gif)
 <br/><br/><br/>
 User's can update profile photo
 
-<img src="/wristbands/static/readmeimg/PROFILE.gif"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/PROFILE.gif)
 
 
 
