@@ -19,7 +19,7 @@ __Backend:__ Python, Flask, PostgreSQL, SQLAlchemy, Jinja<br/>
 
 Register or login to view all things festivals.  
   
-<img src="/wristbands/static/readmeimg/LOGIN:CREATE.gif"
+![](https://github.com/tatummccormack/wristbands/blob/main/static/readmeimg/LOGIN%3ACREATE.gif)
 <br/><br/><br/>
 Search for Festivals by name, location, date, line-up artists. 
   
